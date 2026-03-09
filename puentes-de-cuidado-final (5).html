@@ -1,0 +1,2014 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puentes de Cuidado · Lena</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #fdf7f0; --blush: #f2e4d8;
+    --terracotta: #c4785a; --terracotta-light: #d4957a;
+    --sage: #7a9e8a; --sage-dark: #5a7a68;
+    --brown: #6b4c3b; --brown-light: #9a7060;
+    --text: #3a2e28; --text-mid: #7a6258; --text-soft: #b09888;
+    --white: #ffffff;
+    --ig: #E1306C; --fb: #1877F2; --tt: #010101;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html,body { height:100%; font-family:'DM Sans',sans-serif; background:var(--cream); color:var(--text); overflow:hidden; }
+
+  .app {
+    display:flex; flex-direction:column; height:100vh;
+    max-width:480px; margin:0 auto; background:var(--cream);
+    position:relative; box-shadow:0 0 60px rgba(122,79,58,0.1);
+  }
+  .app::before {
+    content:''; position:fixed; inset:0; max-width:480px; margin:0 auto;
+    background: radial-gradient(ellipse at 15% 40%,rgba(196,120,90,0.07) 0%,transparent 55%),
+                radial-gradient(ellipse at 85% 15%,rgba(122,158,138,0.07) 0%,transparent 50%);
+    pointer-events:none; z-index:0;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position:relative; z-index:10;
+    background:rgba(253,247,240,0.97); backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(196,120,90,0.12);
+    padding:0.7rem 1rem 0;
+    display:flex; flex-direction:column; gap:0;
+  }
+  .header-top {
+    display:flex; align-items:center; gap:0.75rem;
+    padding-bottom:0.6rem;
+  }
+  .lena-avatar {
+    width:46px; height:46px; border-radius:50%;
+    flex-shrink:0; position:relative; overflow:hidden;
+    box-shadow: 0 2px 10px rgba(196,120,90,0.2);
+  }
+  .lena-avatar::after {
+    content:''; position:absolute; bottom:2px; right:2px;
+    width:10px; height:10px; background:#6bc98a;
+    border-radius:50%; border:2px solid var(--cream); z-index:3;
+  }
+  .lena-face-svg { width:100%; height:100%; display:block; }
+  .msg-avatar { width:28px; height:28px; border-radius:50%; flex-shrink:0; overflow:hidden; }
+  .msg-avatar.user-av { background:linear-gradient(135deg,var(--blush),var(--terracotta-light)); display:flex; align-items:center; justify-content:center; font-size:0.75rem; }
+  .header-info { flex:1; }
+  .header-info .brand { font-size:0.6rem; font-weight:500; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.1em; }
+  .header-info h1 { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--brown); }
+  .header-info .status { font-size:0.66rem; color:var(--sage); font-weight:500; }
+
+  .header-btns {
+    display:flex; gap:0.4rem;
+    overflow-x:auto; padding-bottom:0.65rem;
+    scrollbar-width:none; -ms-overflow-style:none;
+  }
+  .header-btns::-webkit-scrollbar { display:none; }
+  .hdr-btn {
+    background:rgba(122,158,138,0.1); border:1.5px solid rgba(122,158,138,0.25);
+    border-radius:20px; padding:0.32rem 0.75rem;
+    font-size:0.7rem; font-weight:600; color:var(--sage-dark);
+    cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;
+    display:flex; align-items:center; gap:0.3rem;
+    white-space:nowrap; flex-shrink:0;
+  }
+  .hdr-btn .bi { font-size:0.85rem; }
+  .hdr-btn:hover { background:var(--sage); color:white; border-color:var(--sage); }
+  .hdr-btn.redes { background:rgba(196,120,90,0.1); border-color:rgba(196,120,90,0.25); color:var(--terracotta); }
+  .hdr-btn.redes:hover { background:var(--terracotta); color:white; border-color:var(--terracotta); }
+  .hdr-btn.lugares { background:rgba(107,76,59,0.08); border-color:rgba(107,76,59,0.2); color:var(--brown); }
+  .hdr-btn.lugares:hover { background:var(--brown); color:white; border-color:var(--brown); }
+  .hdr-btn.lecturas { background:rgba(122,158,138,0.08); border-color:rgba(90,122,104,0.25); color:var(--sage-dark); }
+  .hdr-btn.lecturas:hover { background:var(--sage-dark); color:white; border-color:var(--sage-dark); }
+  .hdr-btn.sindx { background:rgba(212,149,122,0.1); border-color:rgba(196,120,90,0.25); color:#a0522d; }
+  .hdr-btn.sindx:hover { background:var(--terracotta); color:white; border-color:var(--terracotta); }
+  .hdr-btn.autocuidado { background:rgba(212,149,122,0.12); border-color:rgba(212,100,100,0.25); color:#b05050; }
+  .hdr-btn.autocuidado:hover { background:#b05050; color:white; border-color:#b05050; }
+
+  /* ── CRISIS BUTTON ── */
+  .crisis-fab {
+    position:absolute; bottom:5.5rem; right:1rem; z-index:20;
+    width:48px; height:48px; border-radius:50%;
+    background:linear-gradient(135deg,#c0392b,#e74c3c);
+    border:none; cursor:pointer; box-shadow:0 4px 16px rgba(192,57,43,0.35);
+    display:flex; align-items:center; justify-content:center;
+    font-size:1.3rem; transition:all 0.25s; animation:pulse-crisis 3s infinite;
+  }
+  .crisis-fab:hover { transform:scale(1.1); box-shadow:0 6px 22px rgba(192,57,43,0.5); }
+  @keyframes pulse-crisis {
+    0%,100% { box-shadow:0 4px 16px rgba(192,57,43,0.35); }
+    50% { box-shadow:0 4px 24px rgba(192,57,43,0.55); }
+  }
+  .crisis-panel-overlay {
+    display:none; position:absolute; inset:0; z-index:60;
+    background:rgba(58,46,40,0.5); backdrop-filter:blur(4px);
+    animation:fadeIn 0.25s ease;
+  }
+  @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+  .crisis-panel-overlay.visible { display:flex; align-items:flex-end; }
+  .crisis-sheet {
+    background:var(--cream); border-radius:24px 24px 0 0;
+    padding:1.5rem 1.25rem 2rem; width:100%;
+    animation:sheetUp 0.3s ease;
+  }
+  @keyframes sheetUp { from{transform:translateY(100%)} to{transform:translateY(0)} }
+  .crisis-sheet h3 { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--brown); margin-bottom:0.3rem; }
+  .crisis-sheet p { font-size:0.82rem; color:var(--text-mid); line-height:1.6; margin-bottom:1.1rem; }
+  .crisis-actions { display:grid; gap:0.6rem; }
+  .crisis-action {
+    display:flex; align-items:center; gap:0.85rem;
+    background:white; border-radius:16px; padding:0.9rem 1rem;
+    border:1.5px solid rgba(196,120,90,0.15); text-decoration:none;
+    cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif;
+  }
+  .crisis-action:hover { border-color:var(--terracotta); transform:translateX(3px); }
+  .crisis-action .ca-icon { font-size:1.4rem; flex-shrink:0; }
+  .crisis-action .ca-text h4 { font-size:0.88rem; font-weight:600; color:var(--brown); margin-bottom:1px; }
+  .crisis-action .ca-text p { font-size:0.74rem; color:var(--text-soft); margin:0; line-height:1.4; }
+  .crisis-close { margin-top:1rem; width:100%; background:rgba(196,120,90,0.1); border:none; border-radius:12px; padding:0.7rem; font-size:0.82rem; font-weight:600; color:var(--text-mid); cursor:pointer; font-family:'DM Sans',sans-serif; transition:all 0.2s; }
+  .crisis-close:hover { background:rgba(196,120,90,0.2); }
+
+  /* ── DIARIO ── */
+  .diario-area {
+    flex:1; width:100%; background:rgba(253,247,240,0.6);
+    border:1.5px solid rgba(196,120,90,0.15); border-radius:16px;
+    padding:1rem; font-family:'DM Sans',sans-serif; font-size:0.875rem;
+    color:var(--text); line-height:1.7; resize:none; outline:none;
+    transition:border-color 0.2s;
+  }
+  .diario-area:focus { border-color:var(--terracotta); background:white; }
+  .diario-area::placeholder { color:var(--text-soft); font-style:italic; }
+  .diario-actions { display:flex; gap:0.5rem; margin-top:0.75rem; }
+  .diario-btn { flex:1; padding:0.6rem; border-radius:12px; font-size:0.8rem; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; border:1.5px solid; transition:all 0.2s; }
+  .diario-btn.limpiar { background:transparent; border-color:rgba(196,120,90,0.25); color:var(--text-soft); }
+  .diario-btn.limpiar:hover { background:rgba(196,120,90,0.08); color:var(--terracotta); }
+  .diario-btn.enviar { background:var(--terracotta); border-color:var(--terracotta); color:white; }
+  .diario-btn.enviar:hover { background:var(--brown); border-color:var(--brown); }
+  .diario-privacidad { font-size:0.66rem; color:var(--text-soft); text-align:center; margin-top:0.5rem; font-style:italic; }
+  .diario-counter { font-size:0.65rem; color:var(--text-soft); text-align:right; margin-top:0.25rem; }
+
+  /* ── FAQ ── */
+  .faq-card { background:white; border-radius:16px; margin-bottom:0.7rem; border:1.5px solid rgba(196,120,90,0.1); overflow:hidden; }
+  .faq-q { padding:0.9rem 1rem; cursor:pointer; display:flex; align-items:flex-start; gap:0.7rem; transition:background 0.2s; }
+  .faq-q:hover { background:rgba(196,120,90,0.04); }
+  .faq-q .fq-icon { font-size:1rem; flex-shrink:0; margin-top:1px; }
+  .faq-q .fq-text { font-size:0.85rem; font-weight:600; color:var(--brown); flex:1; line-height:1.4; }
+  .faq-q .fq-arrow { color:var(--text-soft); font-size:0.75rem; transition:transform 0.3s; flex-shrink:0; margin-top:2px; }
+  .faq-card.open .fq-arrow { transform:rotate(180deg); }
+  .faq-a { max-height:0; overflow:hidden; transition:max-height 0.4s ease; border-top:0px solid rgba(196,120,90,0.1); }
+  .faq-card.open .faq-a { max-height:500px; border-top-width:1px; }
+  .faq-a-inner { padding:0.85rem 1rem 1rem; font-size:0.81rem; color:var(--text-mid); line-height:1.7; }
+  .faq-a-inner strong { color:var(--brown); }
+  .faq-a-inner .faq-tip { background:rgba(122,158,138,0.1); border-radius:10px; padding:0.6rem 0.8rem; margin-top:0.6rem; font-size:0.78rem; color:var(--sage-dark); }
+
+  /* ── AUTOCUIDADO ── */
+  .auto-card { background:white; border-radius:18px; margin-bottom:0.85rem; border:1.5px solid rgba(196,120,90,0.1); overflow:hidden; box-shadow:0 2px 12px rgba(122,79,58,0.06); }
+  .auto-header { padding:1rem 1.1rem; cursor:pointer; display:flex; align-items:center; gap:0.8rem; transition:background 0.2s; }
+  .auto-header:hover { background:rgba(196,120,90,0.04); }
+  .auto-icon { width:40px; height:40px; border-radius:11px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .auto-title { font-weight:600; font-size:0.9rem; color:var(--brown); }
+  .auto-sub { font-size:0.71rem; color:var(--text-soft); margin-top:1px; }
+  .auto-arrow { margin-left:auto; color:var(--text-soft); font-size:0.78rem; transition:transform 0.3s; }
+  .auto-card.open .auto-arrow { transform:rotate(180deg); }
+  .auto-body { max-height:0; overflow:hidden; transition:max-height 0.45s ease; border-top:0px solid rgba(196,120,90,0.1); }
+  .auto-card.open .auto-body { max-height:700px; border-top-width:1px; }
+  .auto-content { padding:1rem 1.1rem 1.3rem; }
+  .auto-intro { font-size:0.81rem; color:var(--text-mid); line-height:1.65; margin-bottom:0.9rem; font-style:italic; }
+  .burnout-check { display:grid; gap:0.45rem; margin-bottom:0.9rem; }
+  .bc-item { display:flex; gap:0.65rem; align-items:flex-start; padding:0.6rem 0.8rem; background:rgba(253,247,240,0.8); border-radius:10px; font-size:0.8rem; color:var(--text-mid); line-height:1.5; }
+  .bc-dot { width:8px; height:8px; border-radius:50%; background:var(--terracotta-light); flex-shrink:0; margin-top:5px; }
+
+  /* ── CALENDARIO ── */
+  .cal-month { font-family:'Cormorant Garamond',serif; font-size:1rem; font-weight:600; color:var(--brown); margin:1rem 0 0.5rem; padding-bottom:0.3rem; border-bottom:1px solid rgba(196,120,90,0.12); }
+  .cal-event { display:flex; gap:0.75rem; align-items:flex-start; padding:0.7rem 0.85rem; background:white; border-radius:12px; margin-bottom:0.5rem; border:1.5px solid rgba(196,120,90,0.1); }
+  .cal-date { text-align:center; flex-shrink:0; width:36px; }
+  .cal-date .cd-day { font-family:'Cormorant Garamond',serif; font-size:1.3rem; font-weight:600; color:var(--terracotta); line-height:1; }
+  .cal-date .cd-mon { font-size:0.6rem; font-weight:600; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.05em; }
+  .cal-info h4 { font-size:0.84rem; font-weight:600; color:var(--brown); margin-bottom:2px; }
+  .cal-info p { font-size:0.76rem; color:var(--text-mid); line-height:1.5; }
+  .cal-tag { display:inline-block; font-size:0.6rem; font-weight:600; padding:0.15rem 0.5rem; border-radius:999px; margin-top:0.3rem; text-transform:uppercase; }
+  .cal-tag.derechos { background:rgba(122,158,138,0.12); color:var(--sage-dark); }
+  .cal-tag.tramite { background:rgba(196,120,90,0.1); color:var(--terracotta); }
+  .cal-tag.evento { background:rgba(107,76,59,0.1); color:var(--brown-light); }
+  .cal-tag.salud { background:rgba(212,149,122,0.15); color:#a0522d; }
+
+  /* ── LECTURAS PANEL ── */
+  .lec-filter { display:flex; flex-wrap:wrap; gap:0.4rem; padding:0.85rem 1rem 0; flex-shrink:0; }
+  .lecf-btn { background:white; border:1.5px solid rgba(90,122,104,0.2); border-radius:999px; padding:0.35rem 0.8rem; font-size:0.73rem; font-weight:500; color:var(--text-mid); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .lecf-btn:hover { border-color:var(--sage-dark); color:var(--sage-dark); }
+  .lecf-btn.active { background:var(--sage-dark); color:white; border-color:var(--sage-dark); }
+
+  .lectura-card { background:white; border-radius:18px; margin-bottom:0.85rem; box-shadow:0 2px 12px rgba(122,79,58,0.07); border:1.5px solid rgba(196,120,90,0.1); overflow:hidden; transition:all 0.25s; display:flex; gap:0; }
+  .lectura-card:hover { border-color:rgba(90,122,104,0.3); box-shadow:0 6px 20px rgba(90,122,104,0.1); transform:translateY(-1px); }
+  .lectura-card.hidden { display:none; }
+
+  .lec-spine { width:6px; flex-shrink:0; background:var(--sage); }
+  .lec-spine.periodismo { background:#c4785a; }
+  .lec-spine.academia { background:#7a6258; }
+  .lec-spine.novela { background:#7a9e8a; }
+  .lec-spine.infantil { background:#d4957a; }
+
+  .lec-body { padding:0.95rem 1rem; flex:1; }
+  .lec-meta { display:flex; align-items:center; gap:0.4rem; margin-bottom:0.45rem; flex-wrap:wrap; }
+  .lec-tipo { font-size:0.62rem; font-weight:700; padding:0.18rem 0.55rem; border-radius:999px; text-transform:uppercase; letter-spacing:0.06em; }
+  .lec-tipo.periodismo { background:rgba(196,120,90,0.12); color:var(--terracotta); }
+  .lec-tipo.academia { background:rgba(107,76,59,0.1); color:var(--brown); }
+  .lec-tipo.novela { background:rgba(122,158,138,0.12); color:var(--sage-dark); }
+  .lec-tipo.infantil { background:rgba(212,149,122,0.15); color:#a0522d; }
+  .lec-tematica { font-size:0.62rem; color:var(--text-soft); font-weight:500; }
+
+  .lec-titulo { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--brown); line-height:1.25; margin-bottom:2px; }
+  .lec-autor { font-size:0.72rem; color:var(--text-soft); font-weight:500; margin-bottom:0.5rem; }
+  .lec-desc { font-size:0.79rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.65rem; }
+  .lec-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.35rem; }
+  .lec-para { font-size:0.65rem; color:var(--text-soft); font-style:italic; }
+  .lec-link { font-size:0.7rem; font-weight:600; color:var(--sage-dark); text-decoration:none; background:rgba(90,122,104,0.1); border:1px solid rgba(90,122,104,0.2); border-radius:999px; padding:0.22rem 0.65rem; transition:all 0.2s; }
+  .lec-link:hover { background:var(--sage-dark); color:white; }
+
+  /* ── LUGARES PANEL ── */
+  .lugares-filter { display:flex; flex-wrap:wrap; gap:0.4rem; padding:0.85rem 1rem 0; flex-shrink:0; }
+  .lf-btn { background:white; border:1.5px solid rgba(107,76,59,0.18); border-radius:999px; padding:0.35rem 0.8rem; font-size:0.73rem; font-weight:500; color:var(--text-mid); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .lf-btn:hover { border-color:var(--brown); color:var(--brown); }
+  .lf-btn.active { background:var(--brown); color:white; border-color:var(--brown); }
+
+  .lugar-card { background:white; border-radius:18px; margin-bottom:0.85rem; box-shadow:0 2px 12px rgba(122,79,58,0.07); border:1.5px solid rgba(196,120,90,0.1); overflow:hidden; transition:all 0.25s; }
+  .lugar-card:hover { border-color:rgba(196,120,90,0.3); box-shadow:0 6px 20px rgba(122,79,58,0.1); }
+  .lugar-card.hidden { display:none; }
+
+  .lugar-top { padding:1rem 1.1rem 0.7rem; display:flex; gap:0.8rem; align-items:flex-start; }
+  .lugar-emoji { width:44px; height:44px; border-radius:12px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.4rem; background:var(--blush); }
+  .lugar-info { flex:1; }
+  .lugar-info h4 { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--brown); line-height:1.2; margin-bottom:2px; }
+  .lugar-info .lugar-loc { font-size:0.7rem; color:var(--text-soft); font-weight:500; }
+  .lugar-desc { font-size:0.8rem; color:var(--text-mid); line-height:1.6; padding:0 1.1rem 0.75rem; }
+
+  .lugar-tags { display:flex; flex-wrap:wrap; gap:0.35rem; padding:0 1.1rem 0.9rem; }
+  .ltag { font-size:0.65rem; font-weight:600; padding:0.2rem 0.6rem; border-radius:999px; display:flex; align-items:center; gap:0.25rem; }
+  .ltag-ruido-bajo { background:rgba(122,158,138,0.12); color:var(--sage-dark); }
+  .ltag-ruido-alto { background:rgba(196,120,90,0.1); color:var(--terracotta); }
+  .ltag-accesible { background:rgba(107,76,59,0.1); color:var(--brown-light); }
+  .ltag-abierto { background:rgba(138,171,151,0.15); color:#4a7a5a; }
+  .ltag-cerrado { background:rgba(212,168,83,0.15); color:#8a6a20; }
+  .ltag-cud { background:linear-gradient(135deg,rgba(90,122,104,0.18),rgba(90,122,104,0.1)); color:var(--sage-dark); border:1px solid rgba(90,122,104,0.25); }
+  .ltag-horario { background:rgba(160,130,100,0.1); color:#7a5a3a; }
+
+  .cud-banner { background:linear-gradient(135deg,rgba(90,122,104,0.12),rgba(90,122,104,0.06)); border:1.5px solid rgba(90,122,104,0.2); border-radius:14px; padding:0.9rem 1.1rem; margin:0 1.1rem 1rem; display:flex; gap:0.6rem; align-items:flex-start; }
+  .cud-banner .cud-icon { font-size:1.1rem; flex-shrink:0; }
+  .cud-banner p { font-size:0.76rem; color:var(--sage-dark); line-height:1.55; }
+  .cud-banner strong { color:var(--sage-dark); }
+
+  /* SIN DIAGNÓSTICO */
+  .sin-dx-box { background:linear-gradient(135deg,rgba(212,149,122,0.1),rgba(196,120,90,0.07)); border:1.5px solid rgba(196,120,90,0.2); border-radius:18px; padding:1.1rem; margin-bottom:1.1rem; }
+  .sin-dx-box h3 { font-family:'Cormorant Garamond',serif; font-size:1.1rem; font-weight:600; color:var(--brown); margin-bottom:0.5rem; }
+  .sin-dx-box p { font-size:0.8rem; color:var(--text-mid); line-height:1.65; margin-bottom:0.75rem; }
+  .sin-dx-steps { display:grid; gap:0.5rem; }
+  .sdx-step { display:flex; gap:0.65rem; align-items:flex-start; background:rgba(253,247,240,0.8); border-radius:11px; padding:0.65rem 0.8rem; }
+  .sdx-num { width:20px; height:20px; border-radius:50%; flex-shrink:0; background:var(--terracotta-light); color:white; display:flex; align-items:center; justify-content:center; font-size:0.62rem; font-weight:700; margin-top:1px; }
+  .sdx-text { font-size:0.79rem; color:var(--text); line-height:1.55; }
+  .sdx-text strong { color:var(--brown); }
+
+  /* ── ALARM ── */
+  .alarm-banner {
+    display:none; position:relative; z-index:9;
+    background:#fff5f4; border-bottom:2px solid rgba(192,57,43,0.25);
+    padding:0.85rem 1rem; animation:slideDown 0.4s ease;
+  }
+  @keyframes slideDown { from{opacity:0;transform:translateY(-10px)} to{opacity:1;transform:translateY(0)} }
+  .alarm-banner.visible { display:block; }
+  .alarm-inner { display:flex; gap:0.7rem; align-items:flex-start; }
+  .alarm-icon { font-size:1.2rem; flex-shrink:0; }
+  .alarm-text h4 { font-size:0.83rem; font-weight:600; color:#922b21; margin-bottom:0.2rem; }
+  .alarm-text p { font-size:0.76rem; color:#7b241c; line-height:1.5; }
+  .alarm-links { display:flex; gap:0.45rem; margin-top:0.45rem; flex-wrap:wrap; }
+  .alarm-link { background:#922b21; color:white; border:none; border-radius:999px; padding:0.28rem 0.75rem; font-size:0.7rem; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; text-decoration:none; display:inline-block; transition:background 0.2s; }
+  .alarm-link:hover { background:#7b241c; }
+  .alarm-link.secondary { background:transparent; color:#922b21; border:1.5px solid rgba(146,43,33,0.4); }
+  .alarm-link.secondary:hover { background:rgba(146,43,33,0.08); }
+  .alarm-close { margin-left:auto; background:none; border:none; cursor:pointer; color:#c0392b; font-size:1rem; padding:0; flex-shrink:0; }
+
+  /* ── PANELS SHARED ── */
+  .side-panel {
+    display:none; position:absolute; top:0; left:0; right:0; bottom:0;
+    z-index:50; background:var(--cream); flex-direction:column;
+    animation:panelIn 0.32s ease;
+  }
+  @keyframes panelIn { from{opacity:0;transform:translateX(28px)} to{opacity:1;transform:translateX(0)} }
+  .side-panel.visible { display:flex; }
+
+  .panel-header {
+    background:rgba(253,247,240,0.97); backdrop-filter:blur(16px);
+    border-bottom:1px solid rgba(196,120,90,0.12);
+    padding:0.85rem 1rem; display:flex; align-items:center; gap:0.7rem; flex-shrink:0;
+  }
+  .panel-back { background:none; border:none; cursor:pointer; font-size:1.15rem; color:var(--text-mid); padding:0.2rem; transition:color 0.2s; }
+  .panel-back:hover { color:var(--terracotta); }
+  .panel-header h2 { font-family:'Cormorant Garamond',serif; font-size:1.25rem; font-weight:600; color:var(--brown); }
+  .panel-header p { font-size:0.72rem; color:var(--text-soft); }
+
+  .panel-body { flex:1; overflow-y:auto; padding:1.1rem 1rem 2rem; }
+  .panel-body::-webkit-scrollbar { width:4px; }
+  .panel-body::-webkit-scrollbar-thumb { background:rgba(196,120,90,0.2); border-radius:4px; }
+
+  /* ── EJERCICIOS ── */
+  .ejercicio-card { background:white; border-radius:18px; margin-bottom:0.85rem; box-shadow:0 2px 12px rgba(122,79,58,0.07); border:1.5px solid rgba(196,120,90,0.1); overflow:hidden; }
+  .ejercicio-header { padding:1rem 1.1rem; cursor:pointer; display:flex; align-items:center; gap:0.8rem; transition:background 0.2s; }
+  .ejercicio-header:hover { background:rgba(196,120,90,0.04); }
+  .ej-icon-wrap { width:40px; height:40px; border-radius:11px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem; }
+  .ej-title { font-weight:600; font-size:0.9rem; color:var(--brown); }
+  .ej-sub { font-size:0.71rem; color:var(--text-soft); margin-top:1px; }
+  .ej-arrow { margin-left:auto; color:var(--text-soft); font-size:0.78rem; transition:transform 0.3s; }
+  .ejercicio-card.open .ej-arrow { transform:rotate(180deg); }
+  .ejercicio-body { max-height:0; overflow:hidden; transition:max-height 0.45s ease; border-top:0px solid rgba(196,120,90,0.1); }
+  .ejercicio-card.open .ejercicio-body { max-height:620px; border-top-width:1px; }
+  .ejercicio-content { padding:1rem 1.1rem 1.3rem; }
+  .ej-intro { font-size:0.81rem; color:var(--text-mid); line-height:1.65; margin-bottom:0.9rem; font-style:italic; }
+  .ej-steps { display:grid; gap:0.55rem; }
+  .ej-step { display:flex; gap:0.7rem; align-items:flex-start; background:rgba(253,247,240,0.8); border-radius:11px; padding:0.7rem 0.85rem; }
+  .step-num { width:21px; height:21px; border-radius:50%; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:0.65rem; font-weight:700; color:white; background:var(--terracotta); margin-top:1px; }
+  .step-text { font-size:0.81rem; color:var(--text); line-height:1.55; }
+  .step-text strong { color:var(--brown); }
+  .ej-tag { display:inline-block; font-size:0.63rem; font-weight:600; padding:0.18rem 0.55rem; border-radius:999px; margin-top:0.8rem; text-transform:uppercase; letter-spacing:0.06em; }
+
+  .breath-circle-wrap { display:flex; flex-direction:column; align-items:center; padding:0.85rem 0; }
+  .breath-circle { width:82px; height:82px; border-radius:50%; background:radial-gradient(circle,rgba(122,158,138,0.5),rgba(122,158,138,0.1)); border:2px solid rgba(122,158,138,0.4); display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:600; color:var(--sage-dark); cursor:pointer; transition:all 0.2s; margin-bottom:0.5rem; }
+  .breath-circle.inhale { animation:breathIn 4s ease-in-out forwards; }
+  .breath-circle.hold { animation:none; transform:scale(1.35); }
+  .breath-circle.exhale { animation:breathOut 6s ease-in-out forwards; }
+  @keyframes breathIn { from{transform:scale(1)} to{transform:scale(1.35)} }
+  @keyframes breathOut { from{transform:scale(1.35)} to{transform:scale(1)} }
+  .breath-instruction { font-size:0.78rem; color:var(--text-mid); text-align:center; min-height:1.2rem; }
+  .breath-start-btn { background:var(--sage); color:white; border:none; border-radius:999px; padding:0.45rem 1.3rem; font-size:0.78rem; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif; margin-top:0.45rem; transition:all 0.2s; }
+  .breath-start-btn:hover { background:var(--sage-dark); }
+
+  /* ── REDES PANEL ── */
+  .redes-filter { display:flex; flex-wrap:wrap; gap:0.4rem; padding:0.85rem 1rem 0; }
+  .rf-btn { background:white; border:1.5px solid rgba(196,120,90,0.2); border-radius:999px; padding:0.35rem 0.8rem; font-size:0.74rem; font-weight:500; color:var(--text-mid); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .rf-btn:hover { border-color:var(--terracotta); color:var(--terracotta); }
+  .rf-btn.active { background:var(--terracotta); color:white; border-color:var(--terracotta); }
+
+  .section-sep { font-size:0.68rem; font-weight:600; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.1em; margin:1.2rem 0 0.6rem; padding:0 0.1rem; display:flex; align-items:center; gap:0.5rem; }
+  .section-sep::after { content:''; flex:1; height:1px; background:rgba(196,120,90,0.14); }
+
+  .province-sep { font-size:0.64rem; font-weight:600; color:var(--text-soft); text-transform:uppercase; letter-spacing:0.09em; margin:1rem 0 0.5rem; padding-left:0.1rem; display:flex; align-items:center; gap:0.4rem; }
+  .province-sep::after { content:''; flex:1; height:1px; background:rgba(196,120,90,0.12); }
+
+  .accounts-grid { display:grid; gap:0.7rem; }
+
+  .account-card { background:white; border-radius:16px; padding:1rem 1.05rem; border:1.5px solid rgba(196,120,90,0.1); box-shadow:0 2px 10px rgba(122,79,58,0.06); transition:all 0.25s; }
+  .account-card:hover { transform:translateY(-2px); border-color:rgba(196,120,90,0.28); box-shadow:0 6px 20px rgba(122,79,58,0.1); }
+  .account-card.hidden { display:none; }
+
+  .card-top { display:flex; align-items:flex-start; gap:0.65rem; margin-bottom:0.55rem; }
+  .card-avatar { width:40px; height:40px; border-radius:11px; flex-shrink:0; display:flex; align-items:center; justify-content:center; font-size:1.2rem; background:var(--blush); }
+  .card-info h4 { font-size:0.87rem; font-weight:600; color:var(--brown); line-height:1.2; margin-bottom:1px; }
+  .card-handle { font-size:0.7rem; color:var(--text-soft); font-weight:500; }
+  .card-desc { font-size:0.78rem; color:var(--text-mid); line-height:1.6; margin-bottom:0.7rem; }
+  .card-footer { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:0.35rem; }
+  .card-tags { display:flex; gap:0.3rem; flex-wrap:wrap; }
+  .tag { font-size:0.62rem; font-weight:600; padding:0.15rem 0.5rem; border-radius:999px; text-transform:uppercase; letter-spacing:0.05em; }
+  .tag-familias { background:rgba(196,120,90,0.1); color:var(--terracotta); }
+  .tag-ong { background:rgba(122,158,138,0.12); color:var(--sage-dark); }
+  .tag-profesional { background:rgba(107,76,59,0.1); color:var(--brown-light); }
+  .tag-activismo { background:rgba(212,149,122,0.15); color:#a0522d; }
+  .social-links { display:flex; gap:0.3rem; }
+  .social-link { width:26px; height:26px; border-radius:7px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:0.68rem; font-weight:700; transition:all 0.2s; border:1.5px solid transparent; }
+  .social-link.ig { background:rgba(225,48,108,0.08); color:var(--ig); border-color:rgba(225,48,108,0.15); }
+  .social-link.ig:hover { background:var(--ig); color:white; }
+  .social-link.fb { background:rgba(24,119,242,0.08); color:var(--fb); border-color:rgba(24,119,242,0.15); }
+  .social-link.fb:hover { background:var(--fb); color:white; }
+  .social-link.tt { background:rgba(1,1,1,0.06); color:var(--tt); border-color:rgba(1,1,1,0.12); }
+  .social-link.tt:hover { background:var(--tt); color:white; }
+
+  .latam-block { background:white; border-radius:16px; padding:1rem 1.05rem 0.4rem; border:1.5px solid rgba(122,158,138,0.18); margin-bottom:0.7rem; }
+  .latam-flag-row { display:flex; align-items:center; gap:0.5rem; margin-bottom:0.75rem; padding-bottom:0.6rem; border-bottom:1px solid rgba(122,158,138,0.1); }
+  .latam-flag { font-size:1.25rem; }
+  .latam-flag-row h4 { font-family:'Cormorant Garamond',serif; font-size:1.05rem; font-weight:600; color:var(--brown); }
+  .latam-inner { display:grid; gap:0.65rem; margin-bottom:0.75rem; }
+  .latam-card { border-radius:12px; padding:0.8rem 0.9rem; border:1.5px solid rgba(196,120,90,0.1); background:rgba(253,247,240,0.6); }
+  .latam-card .card-top { margin-bottom:0.45rem; }
+  .latam-card .card-avatar { width:34px; height:34px; font-size:1rem; border-radius:9px; }
+  .latam-card .card-info h4 { font-size:0.83rem; }
+  .latam-card .card-desc { font-size:0.76rem; margin-bottom:0.55rem; }
+
+  .tip-box { background:linear-gradient(135deg,rgba(196,120,90,0.07),rgba(122,158,138,0.08)); border:1.5px solid rgba(196,120,90,0.14); border-radius:16px; padding:1rem 1.1rem; margin:1.2rem 0; display:flex; gap:0.75rem; align-items:flex-start; }
+  .tip-box .tip-icon { font-size:1.3rem; flex-shrink:0; }
+  .tip-box h4 { font-size:0.85rem; font-weight:600; color:var(--brown); margin-bottom:0.25rem; }
+  .tip-box p { font-size:0.78rem; color:var(--text-mid); line-height:1.6; }
+
+  /* ── CHAT ── */
+  .chat-area { flex:1; overflow-y:auto; padding:1rem 1rem; position:relative; z-index:1; scroll-behavior:smooth; }
+  .chat-area::-webkit-scrollbar { width:4px; }
+  .chat-area::-webkit-scrollbar-thumb { background:rgba(196,120,90,0.2); border-radius:4px; }
+
+  .date-divider { text-align:center; margin:0.4rem 0 1rem; }
+  .date-divider span { font-size:0.66rem; color:var(--text-soft); background:rgba(196,120,90,0.08); padding:0.22rem 0.75rem; border-radius:999px; font-weight:500; }
+
+  .message { display:flex; margin-bottom:0.75rem; animation:msgIn 0.3s ease; align-items:flex-end; gap:0.42rem; }
+  @keyframes msgIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:translateY(0)} }
+  .message.user { flex-direction:row-reverse; }
+  .message.user .msg-avatar { background:linear-gradient(135deg,var(--blush),var(--terracotta-light)); }
+
+  .bubble { max-width:80%; padding:0.78rem 0.95rem; border-radius:17px; font-size:0.875rem; line-height:1.65; }
+  .message.lena .bubble { background:var(--white); color:var(--text); border-bottom-left-radius:5px; box-shadow:0 2px 10px rgba(122,79,58,0.08); border:1px solid rgba(196,120,90,0.1); }
+  .message.user .bubble { background:var(--terracotta); color:white; border-bottom-right-radius:5px; box-shadow:0 2px 10px rgba(196,120,90,0.22); }
+  .bubble .msg-time { font-size:0.6rem; opacity:0.42; margin-top:0.32rem; text-align:right; }
+
+  .typing-indicator { display:none; align-items:flex-end; gap:0.42rem; margin-bottom:0.75rem; }
+  .typing-bubble { background:var(--white); border:1px solid rgba(196,120,90,0.1); border-bottom-left-radius:5px; border-radius:17px; padding:0.78rem 0.95rem; box-shadow:0 2px 10px rgba(122,79,58,0.08); display:flex; gap:4px; align-items:center; }
+  .typing-dot { width:6px; height:6px; background:var(--terracotta-light); border-radius:50%; animation:typingBounce 1.2s infinite; }
+  .typing-dot:nth-child(2) { animation-delay:0.2s; }
+  .typing-dot:nth-child(3) { animation-delay:0.4s; }
+  @keyframes typingBounce { 0%,60%,100%{transform:translateY(0);opacity:0.5} 30%{transform:translateY(-5px);opacity:1} }
+
+  .quick-replies { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.6rem; }
+  .quick-reply { background:var(--blush); border:1.5px solid rgba(196,120,90,0.2); border-radius:999px; padding:0.35rem 0.8rem; font-size:0.74rem; font-weight:500; color:var(--brown); cursor:pointer; transition:all 0.2s; font-family:'DM Sans',sans-serif; }
+  .quick-reply:hover { background:var(--terracotta); color:white; border-color:var(--terracotta); transform:translateY(-1px); }
+
+  /* ── INPUT ── */
+  .input-area { position:relative; z-index:10; background:rgba(253,247,240,0.97); backdrop-filter:blur(16px); border-top:1px solid rgba(196,120,90,0.12); padding:0.7rem 1rem; }
+  .input-row { display:flex; align-items:flex-end; gap:0.5rem; background:white; border:1.5px solid rgba(196,120,90,0.2); border-radius:24px; padding:0.48rem 0.5rem 0.48rem 0.9rem; transition:border-color 0.2s; box-shadow:0 2px 10px rgba(122,79,58,0.05); }
+  .input-row:focus-within { border-color:var(--terracotta); }
+  #user-input { flex:1; background:none; border:none; outline:none; font-family:'DM Sans',sans-serif; font-size:0.875rem; color:var(--text); resize:none; max-height:100px; line-height:1.5; padding:2px 0; }
+  #user-input::placeholder { color:var(--text-soft); }
+  .send-btn { width:33px; height:33px; border-radius:50%; background:var(--terracotta); border:none; cursor:pointer; display:flex; align-items:center; justify-content:center; transition:all 0.2s; flex-shrink:0; color:white; }
+  .send-btn:hover { background:var(--brown); transform:scale(1.05); }
+  .send-btn:disabled { background:var(--text-soft); cursor:not-allowed; transform:none; }
+  .send-btn svg { width:13px; height:13px; }
+  .input-hint { text-align:center; font-size:0.61rem; color:var(--text-soft); margin-top:0.38rem; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- HEADER -->
+  <header>
+    <div class="header-top">
+      <div class="lena-avatar">
+        <svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" class="lena-face-svg">
+          <!-- Background circle warm gradient -->
+          <circle cx="23" cy="23" r="23" fill="url(#bgGrad)"/>
+          <defs>
+            <radialGradient id="bgGrad" cx="50%" cy="40%" r="60%">
+              <stop offset="0%" stop-color="#f5d5b8"/>
+              <stop offset="100%" stop-color="#e8b090"/>
+            </radialGradient>
+          </defs>
+          <!-- Hair body (back layer) -->
+          <ellipse cx="23" cy="18" rx="14" ry="15" fill="#2d1a0e"/>
+          <!-- Hair top volume -->
+          <ellipse cx="23" cy="10" rx="12" ry="8" fill="#2d1a0e"/>
+          <!-- Hair sides flowing down -->
+          <ellipse cx="10" cy="26" rx="5" ry="11" fill="#2d1a0e"/>
+          <ellipse cx="36" cy="26" rx="5" ry="11" fill="#2d1a0e"/>
+          <!-- Face skin -->
+          <ellipse cx="23" cy="26" rx="12" ry="13" fill="#e8b898"/>
+          <!-- Neck -->
+          <rect x="19.5" y="36" width="7" height="6" rx="3.5" fill="#e8b898"/>
+          <!-- Hair wave detail left -->
+          <path d="M10 18 Q7 26 9 34 Q10 36 11 34 Q10 26 12 20Z" fill="#241408"/>
+          <!-- Hair wave detail right -->
+          <path d="M36 18 Q39 26 37 34 Q36 36 35 34 Q36 26 34 20Z" fill="#241408"/>
+          <!-- Subtle hair highlight -->
+          <path d="M16 9 Q23 6 30 9" stroke="#4a2c14" stroke-width="1.2" fill="none" stroke-linecap="round" opacity="0.5"/>
+          <!-- Eyebrows — soft arched -->
+          <path d="M15.5 21 Q18 19.5 21 20.5" stroke="#4a2c18" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <path d="M25 20.5 Q28 19.5 30.5 21" stroke="#4a2c18" stroke-width="1.4" fill="none" stroke-linecap="round"/>
+          <!-- Eyes whites -->
+          <ellipse cx="18.5" cy="24" rx="2.8" ry="2.4" fill="white"/>
+          <ellipse cx="27.5" cy="24" rx="2.8" ry="2.4" fill="white"/>
+          <!-- Iris warm dark brown -->
+          <circle cx="18.5" cy="24.2" r="1.9" fill="#3a1f0d"/>
+          <circle cx="27.5" cy="24.2" r="1.9" fill="#3a1f0d"/>
+          <!-- Eye shine -->
+          <circle cx="19.3" cy="23.4" r="0.65" fill="white" opacity="0.9"/>
+          <circle cx="28.3" cy="23.4" r="0.65" fill="white" opacity="0.9"/>
+          <!-- Small lower lid line -->
+          <path d="M16 25.8 Q18.5 26.5 21 25.8" stroke="#c49070" stroke-width="0.5" fill="none" opacity="0.5"/>
+          <path d="M25 25.8 Q27.5 26.5 30 25.8" stroke="#c49070" stroke-width="0.5" fill="none" opacity="0.5"/>
+          <!-- Nose — simple, soft -->
+          <path d="M23 26.5 Q21.5 29.5 20.5 30.2 Q23 31 25.5 30.2 Q24.5 29.5 23 26.5Z" fill="#c8856a" opacity="0.35"/>
+          <!-- Mouth — warm smile -->
+          <path d="M18.5 33 Q23 36 27.5 33" stroke="#c4785a" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+          <!-- Upper lip line -->
+          <path d="M20 32.5 Q23 31.5 26 32.5" stroke="#c4785a" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/>
+          <!-- Cheek blush -->
+          <ellipse cx="14" cy="29" rx="3.5" ry="2.2" fill="#e87060" opacity="0.18"/>
+          <ellipse cx="32" cy="29" rx="3.5" ry="2.2" fill="#e87060" opacity="0.18"/>
+          <!-- Small earring hint -->
+          <circle cx="11.5" cy="28" r="1.2" fill="#c4785a" opacity="0.7"/>
+          <circle cx="34.5" cy="28" r="1.2" fill="#c4785a" opacity="0.7"/>
+        </svg>
+      </div>
+      <div class="header-info">
+        <div class="brand">Puentes de Cuidado</div>
+        <h1>Lena</h1>
+        <div class="status">En línea · Aquí para acompañarte</div>
+      </div>
+    </div>
+    <div class="header-btns">
+      <button class="hdr-btn" onclick="showPanel('ejercicios')">
+        <span class="bi">🧘</span><span>Ejercicios</span>
+      </button>
+      <button class="hdr-btn redes" onclick="showPanel('redes')">
+        <span class="bi">🌐</span><span>Redes</span>
+      </button>
+      <button class="hdr-btn lugares" onclick="showPanel('lugares')">
+        <span class="bi">🗺️</span><span>Paseos</span>
+      </button>
+      <button class="hdr-btn lecturas" onclick="showPanel('lecturas')">
+        <span class="bi">📚</span><span>Lecturas</span>
+      </button>
+      <button class="hdr-btn sindx" onclick="showPanel('sindx')">
+        <span class="bi">🌱</span><span>Sin diagnóstico</span>
+      </button>
+      <button class="hdr-btn autocuidado" onclick="showPanel('autocuidado')">
+        <span class="bi">🫀</span><span>Para vos</span>
+      </button>
+      <button class="hdr-btn" style="background:rgba(107,76,59,0.08);border-color:rgba(107,76,59,0.2);color:var(--brown)" onclick="showPanel('faq')">
+        <span class="bi">❓</span><span>Preguntas</span>
+      </button>
+      <button class="hdr-btn" style="background:rgba(212,149,122,0.1);border-color:rgba(196,120,90,0.2);color:#a05030" onclick="showPanel('diario')">
+        <span class="bi">🖊️</span><span>Tu espacio</span>
+      </button>
+      <button class="hdr-btn" style="background:rgba(122,158,138,0.08);border-color:rgba(90,122,104,0.2);color:var(--sage-dark)" onclick="showPanel('calendario')">
+        <span class="bi">📅</span><span>Fechas</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ALARM -->
+  <div class="alarm-banner" id="alarm-banner">
+    <div class="alarm-inner">
+      <div class="alarm-icon">🤍</div>
+      <div class="alarm-text">
+        <h4>Lo que sentís importa y merece atención</h4>
+        <p>Lena notó algo en lo que escribiste. No estás sola/solo. Hay personas que pueden acompañarte ahora mismo.</p>
+        <div class="alarm-links">
+          <a class="alarm-link" href="tel:135">Centro de Asistencia · 135</a>
+          <a class="alarm-link secondary" href="https://www.argentina.gob.ar/salud/salud-mental" target="_blank">Salud Mental Argentina</a>
+        </div>
+      </div>
+      <button class="alarm-close" onclick="closeAlarm()">✕</button>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: EJERCICIOS ══ -->
+  <div class="side-panel" id="panel-ejercicios">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('ejercicios')">←</button>
+      <div><h2>Ejercicios de regulación</h2><p>Para los momentos de sobrecarga</p></div>
+    </div>
+    <div class="panel-body">
+
+      <div class="ejercicio-card" id="ej1">
+        <div class="ejercicio-header" onclick="toggleEj('ej1')">
+          <div class="ej-icon-wrap" style="background:rgba(122,158,138,0.12)">🌬️</div>
+          <div><div class="ej-title">Respiración 4-7-8</div><div class="ej-sub">Calma el sistema nervioso en 2 minutos</div></div>
+          <span class="ej-arrow">▾</span>
+        </div>
+        <div class="ejercicio-body"><div class="ejercicio-content">
+          <p class="ej-intro">Cuando el cuerpo entra en modo alarma, la respiración es la palanca más rápida para salir. Activa el nervio vago y frena la respuesta de estrés.</p>
+          <div class="breath-circle-wrap">
+            <div class="breath-circle" id="breath-circle">Tocame</div>
+            <div class="breath-instruction" id="breath-instruction">Presioná el círculo para comenzar</div>
+            <button class="breath-start-btn" id="breath-start" onclick="startBreath()">Empezar</button>
+          </div>
+          <div class="ej-steps">
+            <div class="ej-step"><div class="step-num">1</div><div class="step-text"><strong>Inhalá</strong> por la nariz contando 4 segundos</div></div>
+            <div class="ej-step"><div class="step-num">2</div><div class="step-text"><strong>Retené</strong> el aire contando 7 segundos</div></div>
+            <div class="ej-step"><div class="step-num">3</div><div class="step-text"><strong>Exhalá</strong> por la boca lentamente contando 8 segundos</div></div>
+          </div>
+          <span class="ej-tag" style="background:rgba(122,158,138,0.12);color:var(--sage-dark)">Técnica respiratoria · Evidence-based</span>
+        </div></div>
+      </div>
+
+      <div class="ejercicio-card" id="ej2">
+        <div class="ejercicio-header" onclick="toggleEj('ej2')">
+          <div class="ej-icon-wrap" style="background:rgba(196,120,90,0.1)">🌱</div>
+          <div><div class="ej-title">Grounding 5-4-3-2-1</div><div class="ej-sub">Volvé al presente cuando la mente se desborda</div></div>
+          <span class="ej-arrow">▾</span>
+        </div>
+        <div class="ejercicio-body"><div class="ejercicio-content">
+          <p class="ej-intro">Cuando los pensamientos se aceleran, este ejercicio de anclaje sensorial interrumpe el ciclo y te trae de vuelta al aquí y ahora.</p>
+          <div class="ej-steps">
+            <div class="ej-step"><div class="step-num" style="background:var(--sage)">5</div><div class="step-text">Nombrá <strong>5 cosas que podés ver</strong> ahora mismo</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--sage)">4</div><div class="step-text">Nombrá <strong>4 cosas que podés tocar</strong>. Sentí su textura</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--sage)">3</div><div class="step-text">Nombrá <strong>3 sonidos que escuchás</strong> en este momento</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--sage)">2</div><div class="step-text">Nombrá <strong>2 olores</strong> que podés percibir o que te gustan</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--sage)">1</div><div class="step-text">Nombrá <strong>1 cosa que podés saborear</strong> o que disfrutás</div></div>
+          </div>
+          <span class="ej-tag" style="background:rgba(196,120,90,0.1);color:var(--terracotta)">Anclaje sensorial · TCC</span>
+        </div></div>
+      </div>
+
+      <div class="ejercicio-card" id="ej3">
+        <div class="ejercicio-header" onclick="toggleEj('ej3')">
+          <div class="ej-icon-wrap" style="background:rgba(212,149,122,0.12)">💛</div>
+          <div><div class="ej-title">Pausa autocompasiva</div><div class="ej-sub">Para cuando la culpa o el agotamiento pesan mucho</div></div>
+          <span class="ej-arrow">▾</span>
+        </div>
+        <div class="ejercicio-body"><div class="ejercicio-content">
+          <p class="ej-intro">Cuidar a un hijo con discapacidad puede generar una culpa silenciosa y constante. Este ejercicio, basado en la autocompasión de Kristin Neff, ayuda a soltar ese peso.</p>
+          <div class="ej-steps">
+            <div class="ej-step"><div class="step-num" style="background:var(--terracotta-light)">1</div><div class="step-text">Poné una mano en el pecho. <strong>Respirá</strong> y reconocé: "Este momento es difícil. Lo que siento es real."</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--terracotta-light)">2</div><div class="step-text">Recordá que <strong>no estás sola/solo</strong>: muchas familias sienten lo mismo. El sufrimiento es parte de cuidar con amor.</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--terracotta-light)">3</div><div class="step-text">Decite, como se lo dirías a una amiga: <strong>"Estás haciendo lo mejor que podés. Eso es suficiente."</strong></div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--terracotta-light)">4</div><div class="step-text">Respirá profundo y <strong>soltá</strong> lo que no podés controlar hoy. Solo hoy.</div></div>
+          </div>
+          <span class="ej-tag" style="background:rgba(212,149,122,0.12);color:var(--brown-light)">Autocompasión · Mindfulness basado en evidencia</span>
+        </div></div>
+      </div>
+
+      <div class="ejercicio-card" id="ej4">
+        <div class="ejercicio-header" onclick="toggleEj('ej4')">
+          <div class="ej-icon-wrap" style="background:rgba(107,76,59,0.1)">🤲</div>
+          <div><div class="ej-title">Descarga física de tensión</div><div class="ej-sub">Cuando el cuerpo acumula lo que la mente no puede soltar</div></div>
+          <span class="ej-arrow">▾</span>
+        </div>
+        <div class="ejercicio-body"><div class="ejercicio-content">
+          <p class="ej-intro">El estrés crónico se acumula en mandíbula, hombros y pecho. Este ejercicio de tensión-relajación progresiva lo libera en pocos minutos.</p>
+          <div class="ej-steps">
+            <div class="ej-step"><div class="step-num" style="background:var(--brown-light)">1</div><div class="step-text"><strong>Apretá los puños</strong> con fuerza 5 segundos. Soltá despacio y sentí la diferencia.</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--brown-light)">2</div><div class="step-text"><strong>Tensá los hombros</strong> hacia las orejas, 5 segundos. Soltá y dejá caer el peso.</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--brown-light)">3</div><div class="step-text"><strong>Apretá la mandíbula</strong>, 5 segundos. Al soltar, dejá la boca entreabierta.</div></div>
+            <div class="ej-step"><div class="step-num" style="background:var(--brown-light)">4</div><div class="step-text">Repetí <strong>tres veces</strong> y terminá con tres respiraciones profundas.</div></div>
+          </div>
+          <span class="ej-tag" style="background:rgba(107,76,59,0.1);color:var(--brown)">Relajación muscular progresiva · Jacobson</span>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: REDES ══ -->
+  <div class="side-panel" id="panel-redes">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('redes')">←</button>
+      <div><h2>Comunidades en redes 🌐</h2><p>Cuentas reales, activas y en español</p></div>
+    </div>
+
+    <div class="redes-filter">
+      <button class="rf-btn active" onclick="filterRedes('todos',this)">Todas</button>
+      <button class="rf-btn" onclick="filterRedes('familias',this)">💛 Familias</button>
+      <button class="rf-btn" onclick="filterRedes('ong',this)">🤝 ONGs</button>
+      <button class="rf-btn" onclick="filterRedes('profesional',this)">🔬 Profesionales</button>
+      <button class="rf-btn" onclick="filterRedes('activismo',this)">✊ Activismo</button>
+    </div>
+
+    <div class="panel-body" style="padding-top:0.75rem">
+
+      <div class="section-sep">🇦🇷 Argentina · Nacional</div>
+      <div class="accounts-grid">
+
+        <div class="account-card" data-type="familias ong">
+          <div class="card-top"><div class="card-avatar">👨‍👩‍👧</div><div class="card-info"><h4>TGD Padres TEA</h4><div class="card-handle">@tgdpadrestea</div></div></div>
+          <div class="card-desc">Padres autoconvocados de toda Argentina que luchan por la calidad de vida de sus hijos con autismo desde 2007. Una de las comunidades más activas del país.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/tgdpadrestea/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/tgdpadrestea" target="_blank">FB</a></div></div>
+        </div>
+
+        <div class="account-card" data-type="ong">
+          <div class="card-top"><div class="card-avatar">💙</div><div class="card-info"><h4>APAdeA</h4><div class="card-handle">@apadeacentral</div></div></div>
+          <div class="card-desc">Asociación Argentina de Padres de Autistas, fundada en 1994. Asesoramiento legal gratuito y acompañamiento escolar en todo el país.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/apadeacentral/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/APAdeA.Autismo" target="_blank">FB</a></div></div>
+        </div>
+
+        <div class="account-card" data-type="ong profesional">
+          <div class="card-top"><div class="card-avatar">🔬</div><div class="card-info"><h4>PANAACEA</h4><div class="card-handle">@panaacea</div></div></div>
+          <div class="card-desc">Programa Argentino para personas en el Espectro Autista. Referente científico nacional con enfoque en derechos y evidencia.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span><span class="tag tag-profesional">Prof.</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/panaacea/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/panaacea" target="_blank">FB</a></div></div>
+        </div>
+
+        <div class="account-card" data-type="familias activismo">
+          <div class="card-top"><div class="card-avatar">🌈</div><div class="card-info"><h4>Daniela Aza</h4><div class="card-handle">@shinebrightamc</div></div></div>
+          <div class="card-desc">Mamá de hijos con discapacidad y comunicadora. +150K seguidores. Sobre resiliencia, derechos y vida real con discapacidad.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-familias">Familias</span><span class="tag tag-activismo">Activismo</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/shinebrightamc/" target="_blank">IG</a><a class="social-link tt" href="https://www.tiktok.com/@shinebrightamc" target="_blank">TT</a></div></div>
+        </div>
+
+        <div class="account-card" data-type="ong activismo">
+          <div class="card-top"><div class="card-avatar">✊</div><div class="card-info"><h4>REDI</h4><div class="card-handle">@rediscapacidad</div></div></div>
+          <div class="card-desc">Red por los Derechos de las Personas con Discapacidad. Monitorea vulneraciones y asesora a familias gratuitamente.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span><span class="tag tag-activismo">Activismo</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/rediscapacidad/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/redi.org.ar" target="_blank">FB</a></div></div>
+        </div>
+
+        <div class="account-card" data-type="ong">
+          <div class="card-top"><div class="card-avatar">⭐</div><div class="card-info"><h4>ASDRA</h4><div class="card-handle">@asdra_oficial</div></div></div>
+          <div class="card-desc">Asociación Síndrome de Down Argentina. Información, derechos e inclusión educativa y laboral para toda la familia.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/asdra_oficial/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/ASDRA.Argentina" target="_blank">FB</a></div></div>
+        </div>
+
+        <div class="account-card" data-type="profesional">
+          <div class="card-top"><div class="card-avatar">🧠</div><div class="card-info"><h4>Autismored Argentina</h4><div class="card-handle">@autismored</div></div></div>
+          <div class="card-desc">Plataforma que conecta familias con profesionales, escuelas y servicios en todo Argentina por geolocalización. Gratuita.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-profesional">Profesional</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismored/" target="_blank">IG</a></div></div>
+        </div>
+
+      </div>
+
+      <div class="section-sep" style="margin-top:1.5rem">📍 Por provincia</div>
+
+      <div class="province-sep">CABA y GBA</div>
+      <div class="accounts-grid">
+        <div class="account-card" data-type="familias profesional">
+          <div class="card-top"><div class="card-avatar">🌻</div><div class="card-info"><h4>Universo TEA CABA</h4><div class="card-handle">@universo.tea</div></div></div>
+          <div class="card-desc">Recursos y comunidad para familias y profesionales de TEA en Buenos Aires. Incluye info sobre trámites e inclusión escolar.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/universo.tea/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/UniversoTEA" target="_blank">FB</a></div></div>
+        </div>
+      </div>
+
+      <div class="province-sep">Córdoba</div>
+      <div class="accounts-grid">
+        <div class="account-card" data-type="ong familias">
+          <div class="card-top"><div class="card-avatar">💙</div><div class="card-info"><h4>Autismo Córdoba</h4><div class="card-handle">@autismocordoba</div></div></div>
+          <div class="card-desc">Más de 300 familias cordobesas con personas con autismo desde 1995. Servicios, apoyo e incidencia local.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismocordoba/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/AutismoCordoba" target="_blank">FB</a></div></div>
+        </div>
+      </div>
+
+      <div class="province-sep">Rosario y Santa Fe</div>
+      <div class="accounts-grid">
+        <div class="account-card" data-type="familias">
+          <div class="card-top"><div class="card-avatar">🌹</div><div class="card-info"><h4>TEA Familias Rosario</h4><div class="card-handle">@teafamiliasrosario</div></div></div>
+          <div class="card-desc">Red de familias rosarinas con hijos en el espectro autista. Recursos locales y espacios de encuentro.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/teafamiliasrosario/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/teafamiliasrosario" target="_blank">FB</a></div></div>
+        </div>
+      </div>
+
+      <div class="province-sep">Mendoza</div>
+      <div class="accounts-grid">
+        <div class="account-card" data-type="familias ong">
+          <div class="card-top"><div class="card-avatar">🍇</div><div class="card-info"><h4>Autismo Mendoza</h4><div class="card-handle">@autismomendoza</div></div></div>
+          <div class="card-desc">Comunidad de familias y profesionales mendocinos dedicada a difundir derechos y servicios locales del espectro autista.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismomendoza/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/autismomendoza" target="_blank">FB</a></div></div>
+        </div>
+      </div>
+
+      <div class="province-sep">Tucumán y NOA</div>
+      <div class="accounts-grid">
+        <div class="account-card" data-type="ong familias">
+          <div class="card-top"><div class="card-avatar">🌿</div><div class="card-info"><h4>Fundación ANIA</h4><div class="card-handle">@fundacionania</div></div></div>
+          <div class="card-desc">Fundación tucumana activa en incidencia sobre políticas de autismo y discapacidad en el NOA. Acompaña a familias de toda la región.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/fundacionania/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/fundacionania" target="_blank">FB</a></div></div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-icon">💡</div>
+        <div><h4>¿Por qué seguir cuentas de otros países?</h4><p>La lucha por los derechos y las herramientas de cuidado trascienden fronteras. Muchas familias latinoamericanas comparten los mismos desafíos.</p></div>
+      </div>
+
+      <div class="section-sep">🌎 Latinoamérica</div>
+
+      <div class="latam-block">
+        <div class="latam-flag-row"><span class="latam-flag">🇨🇱</span><h4>Chile</h4></div>
+        <div class="latam-inner">
+          <div class="account-card latam-card" data-type="ong">
+            <div class="card-top"><div class="card-avatar" style="width:34px;height:34px;font-size:1rem;border-radius:9px">🌊</div><div class="card-info"><h4>Fundación TEA Chile</h4><div class="card-handle">@fundacionteachile</div></div></div>
+            <div class="card-desc">Referente nacional chileno en autismo. Sedes en varias ciudades. Derechos, inclusión y novedades legales. 54K seguidores.</div>
+            <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/fundacionteachile/" target="_blank">IG</a></div></div>
+          </div>
+          <div class="account-card latam-card" data-type="ong familias">
+            <div class="card-top"><div class="card-avatar" style="width:34px;height:34px;font-size:1rem;border-radius:9px">🤲</div><div class="card-info"><h4>Apoyo Autismo Chile</h4><div class="card-handle">@apoyoautismochile</div></div></div>
+            <div class="card-desc">Pionera en Chile. Grupos de apoyo y recursos en lectura fácil para personas autistas y familias.</div>
+            <div class="card-footer"><div class="card-tags"><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/apoyoautismochile/" target="_blank">IG</a></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="latam-block">
+        <div class="latam-flag-row"><span class="latam-flag">🇲🇽</span><h4>México</h4></div>
+        <div class="latam-inner">
+          <div class="account-card latam-card" data-type="activismo ong">
+            <div class="card-top"><div class="card-avatar" style="width:34px;height:34px;font-size:1rem;border-radius:9px">✊</div><div class="card-info"><h4>Autistas de México AC</h4><div class="card-handle">@aumexac</div></div></div>
+            <div class="card-desc">Activismo autista desde la neurodiversidad y los derechos humanos. Fuerte en autonomía y autodeterminación.</div>
+            <div class="card-footer"><div class="card-tags"><span class="tag tag-activismo">Activismo</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/aumexac/" target="_blank">IG</a></div></div>
+          </div>
+          <div class="account-card latam-card" data-type="ong">
+            <div class="card-top"><div class="card-avatar" style="width:34px;height:34px;font-size:1rem;border-radius:9px">🏙️</div><div class="card-info"><h4>Autismo CDMX</h4><div class="card-handle">@autismocdmx</div></div></div>
+            <div class="card-desc">Red de organizaciones civiles de Ciudad de México. Directorio de servicios, terapias y escuelas locales.</div>
+            <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismocdmx/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/autismocdmexico" target="_blank">FB</a></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="latam-block">
+        <div class="latam-flag-row"><span class="latam-flag">🇨🇴</span><h4>Colombia</h4></div>
+        <div class="latam-inner">
+          <div class="account-card latam-card" data-type="ong profesional">
+            <div class="card-top"><div class="card-avatar" style="width:34px;height:34px;font-size:1rem;border-radius:9px">🌺</div><div class="card-info"><h4>Autismo en Voz Alta</h4><div class="card-handle">@autismoenvozalta</div></div></div>
+            <div class="card-desc">Institución colombiana con educación y terapias para niños con autismo. Contenido de calidad, 59K seguidores.</div>
+            <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismoenvozalta/" target="_blank">IG</a></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="latam-block">
+        <div class="latam-flag-row"><span class="latam-flag">🇺🇾</span><h4>Uruguay</h4></div>
+        <div class="latam-inner">
+          <div class="account-card latam-card" data-type="ong familias">
+            <div class="card-top"><div class="card-avatar" style="width:34px;height:34px;font-size:1rem;border-radius:9px">💛</div><div class="card-info"><h4>Federación Autismo Uruguay</h4><div class="card-handle">@autismouruguay</div></div></div>
+            <div class="card-desc">Nuclea asociaciones, centros y familias uruguayas del espectro autista. Puerta de entrada al ecosistema de recursos en Uruguay.</div>
+            <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span><span class="tag tag-familias">Familias</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismouruguay/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/federacionautismouy" target="_blank">FB</a></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-sep">🌐 Para todo hispanohablante</div>
+      <div class="accounts-grid">
+        <div class="account-card" data-type="profesional activismo">
+          <div class="card-top"><div class="card-avatar">♾️</div><div class="card-info"><h4>Autismo en Positivo</h4><div class="card-handle">@autismoenpositivoo</div></div></div>
+          <div class="card-desc">Tatiana Luis, mujer autista con maestría en autismo. Una de las voces más influyentes del mundo hispanohablante sobre neurodiversidad y familias.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-profesional">Profesional</span><span class="tag tag-activismo">Activismo</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismoenpositivoo/" target="_blank">IG</a><a class="social-link tt" href="https://www.tiktok.com/@autismoenpositivoo" target="_blank">TT</a></div></div>
+        </div>
+        <div class="account-card" data-type="ong profesional">
+          <div class="card-top"><div class="card-avatar">🔵</div><div class="card-info"><h4>Autismo España</h4><div class="card-handle">@autismo_espana</div></div></div>
+          <div class="card-desc">Confederación española referente en investigación y políticas públicas. Contenido educativo, basado en evidencia y muy accesible. 44K seguidores.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-ong">ONG</span><span class="tag tag-profesional">Profesional</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/autismo_espana/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/autismoespana" target="_blank">FB</a></div></div>
+        </div>
+        <div class="account-card" data-type="profesional">
+          <div class="card-top"><div class="card-avatar">🧩</div><div class="card-info"><h4>Hablemos de Neurodesarrollo</h4><div class="card-handle">@hablemosdeneurodes</div></div></div>
+          <div class="card-desc">Espacio informativo sobre TDAH, autismo y neurodiversidad con enfoque en género y diagnóstico tardío. Muy seguido por familias latinoamericanas.</div>
+          <div class="card-footer"><div class="card-tags"><span class="tag tag-profesional">Profesional</span></div><div class="social-links"><a class="social-link ig" href="https://www.instagram.com/hablemosdeneurodes/" target="_blank">IG</a><a class="social-link fb" href="https://www.facebook.com/hablemosdeneurodes" target="_blank">FB</a></div></div>
+        </div>
+      </div>
+
+      <div class="tip-box" style="margin-top:1.5rem">
+        <div class="tip-icon">🌿</div>
+        <div><h4>¿Conocés una cuenta que debería estar acá?</h4><p>Esta lista crece con la comunidad. Escribinos a <strong>@puentesdecuidado</strong> en Instagram y la sumamos.</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: LUGARES ══ -->
+  <div class="side-panel" id="panel-lugares">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('lugares')">←</button>
+      <div><h2>Paseos y actividades 🗺️</h2><p>Lugares pensados para sus tiempos y necesidades</p></div>
+    </div>
+
+    <div class="lugares-filter">
+      <button class="lf-btn active" onclick="filterLugares('todos',this)">Todos</button>
+      <button class="lf-btn" onclick="filterLugares('parque',this)">🌳 Parques</button>
+      <button class="lf-btn" onclick="filterLugares('museo',this)">🏛️ Museos</button>
+      <button class="lf-btn" onclick="filterLugares('deporte',this)">⚽ Deportes</button>
+      <button class="lf-btn" onclick="filterLugares('natural',this)">🌊 Naturaleza</button>
+      <button class="lf-btn" onclick="filterLugares('cud',this)">🎫 CUD gratis</button>
+    </div>
+
+    <div class="panel-body" style="padding-top:0.85rem">
+
+      <!-- CUD info -->
+      <div class="cud-banner">
+        <div class="cud-icon">🎫</div>
+        <p><strong>Con el CUD tenés pase libre o descuento</strong> en la mayoría de los espacios culturales, parques nacionales y actividades recreativas del Estado. Siempre llevalo encima al salir.</p>
+      </div>
+
+      <div class="section-sep" style="margin-top:0.5rem;font-size:0.68rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;display:flex;align-items:center;gap:0.5rem">
+        🇦🇷 Buenos Aires y GBA
+        <span style="flex:1;height:1px;background:rgba(196,120,90,0.14);display:block"></span>
+      </div>
+
+      <div class="lugar-card" data-type="parque cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🌳</div>
+          <div class="lugar-info"><h4>Parque Tres de Febrero (Bosques de Palermo)</h4><div class="lugar-loc">📍 CABA</div></div>
+        </div>
+        <div class="lugar-desc">Extenso parque arbolado con espacios abiertos, lago y rosedal. Ideal por sus sectores tranquilos lejos de las zonas de juegos. Los fines de semana temprano hay muy poca gente.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido bajo en zonas arboladas</span>
+          <span class="ltag ltag-abierto">☁️ Espacio abierto</span>
+          <span class="ltag ltag-accesible">♿ Accesible</span>
+          <span class="ltag ltag-horario">⏰ Mejor: 8–10hs o días de semana</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="museo cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🦕</div>
+          <div class="lugar-info"><h4>Museo Argentino de Ciencias Naturales</h4><div class="lugar-loc">📍 CABA · Caballito</div></div>
+        </div>
+        <div class="lugar-desc">Dinosaurios, fósiles y exhibiciones visuales que suelen ser muy motivadoras para chicos con TEA. Las salas son amplias, con luz natural y poca estimulación sonora. Tiene programa de visitas inclusivas.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: entrada gratuita</span>
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido moderado</span>
+          <span class="ltag ltag-cerrado">🏠 Espacio cerrado</span>
+          <span class="ltag ltag-accesible">♿ Accesible</span>
+          <span class="ltag ltag-horario">⏰ Mejor: martes a jueves a la mañana</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="museo cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🚀</div>
+          <div class="lugar-info"><h4>Planetario Galileo Galilei</h4><div class="lugar-loc">📍 CABA · Palermo</div></div>
+        </div>
+        <div class="lugar-desc">Las funciones del planetario son experiencias sensoriales muy contenidas: oscuridad, proyecciones y narración. Para chicos con fascinación por el espacio o que disfrutan estímulos visuales intensos en entorno controlado.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: entrada gratuita</span>
+          <span class="ltag ltag-cerrado">🏠 Espacio cerrado</span>
+          <span class="ltag ltag-accesible">♿ Accesible</span>
+          <span class="ltag ltag-horario">⏰ Mejor: funciones entre semana</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="parque cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🌿</div>
+          <div class="lugar-info"><h4>Jardín Botánico Carlos Thays</h4><div class="lugar-loc">📍 CABA · Palermo</div></div>
+        </div>
+        <div class="lugar-desc">Jardín tranquilo con senderos delimitados, árboles imponentes y poca estimulación visual caótica. Muy predecible espacialmente, lo que facilita la autonomía. Los gatos que viven ahí suelen ser un punto de conexión para muchos chicos.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: entrada gratuita</span>
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido muy bajo</span>
+          <span class="ltag ltag-abierto">☁️ Espacio abierto</span>
+          <span class="ltag ltag-accesible">♿ Accesible</span>
+          <span class="ltag ltag-horario">⏰ Mejor: días de semana por la mañana</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="deporte">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🏊</div>
+          <div class="lugar-info"><h4>Hidroterapia en piletas municipales</h4><div class="lugar-loc">📍 CABA y GBA · Varias sedes</div></div>
+        </div>
+        <div class="lugar-desc">El agua es uno de los entornos sensoriales más reguladores para muchos chicos con TEA o discapacidad motriz. Los polideportivos municipales tienen turnos de hidroterapia y natación adaptada. Preguntá en tu CGP o municipio.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: acceso gratuito o bonificado</span>
+          <span class="ltag ltag-cerrado">🏠 Espacio cerrado</span>
+          <span class="ltag ltag-accesible">♿ Adaptado</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="deporte">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🐴</div>
+          <div class="lugar-info"><h4>Equinoterapia · Centros en GBA</h4><div class="lugar-loc">📍 GBA · Zona Norte, Oeste y Sur</div></div>
+        </div>
+        <div class="lugar-desc">La equinoterapia tiene fuerte evidencia en regulación sensorial, equilibrio y vínculo emocional. La obra social con CUD suele cubrirla como prestación. Consultá en ANDIS o en tu obra social antes de buscar centro.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: cubierta por obra social</span>
+          <span class="ltag ltag-abierto">☁️ Espacio abierto</span>
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido bajo</span>
+        </div>
+      </div>
+
+      <div class="section-sep" style="margin-top:1.2rem;font-size:0.68rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;display:flex;align-items:center;gap:0.5rem">
+        🌊 Provincia de Buenos Aires · Costa y naturaleza
+        <span style="flex:1;height:1px;background:rgba(196,120,90,0.14);display:block"></span>
+      </div>
+
+      <div class="lugar-card" data-type="natural cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🌊</div>
+          <div class="lugar-info"><h4>Playas de temporada baja</h4><div class="lugar-loc">📍 Mar del Plata · Pinamar · Villa Gesell</div></div>
+        </div>
+        <div class="lugar-desc">La playa en abril, mayo o septiembre es un espacio completamente diferente: sin música, sin multitudes, sin ruido caótico. El sonido del mar tiene efecto regulador comprobado. Y el acceso a la arena es libre y gratuito siempre.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-abierto">☁️ Espacio abierto</span>
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido bajo (fuera de temporada)</span>
+          <span class="ltag ltag-horario">⏰ Mejor: temporada baja o mañanas tempranas</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="natural cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🦜</div>
+          <div class="lugar-info"><h4>Reserva Natural Punta Lara</h4><div class="lugar-loc">📍 Ensenada · Prov. Buenos Aires</div></div>
+        </div>
+        <div class="lugar-desc">Reserva natural pública, entrada libre y gratuita. Selva marginal y ribera del Río de la Plata. Senderos tranquilos, mucha biodiversidad de aves. Ideal para chicos con fascinación por animales o que necesitan espacio físico amplio.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 Entrada libre y gratuita</span>
+          <span class="ltag ltag-abierto">☁️ Espacio abierto</span>
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido natural</span>
+        </div>
+      </div>
+
+      <div class="section-sep" style="margin-top:1.2rem;font-size:0.68rem;font-weight:600;color:var(--text-soft);text-transform:uppercase;letter-spacing:0.1em;display:flex;align-items:center;gap:0.5rem">
+        🏔️ Interior del país
+        <span style="flex:1;height:1px;background:rgba(196,120,90,0.14);display:block"></span>
+      </div>
+
+      <div class="lugar-card" data-type="natural cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🏔️</div>
+          <div class="lugar-info"><h4>Parques Nacionales argentinos</h4><div class="lugar-loc">📍 Todo el país · Administración de Parques Nacionales</div></div>
+        </div>
+        <div class="lugar-desc">Con CUD, el ingreso a todos los Parques Nacionales es gratuito para la persona con discapacidad y un acompañante. Nahuel Huapi, Iguazú, Quebrada de Humahuaca, Los Glaciares. Espacios naturales amplios, predecibles y con bajo ruido social.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: ingreso gratuito + acompañante</span>
+          <span class="ltag ltag-abierto">☁️ Espacio abierto</span>
+          <span class="ltag ltag-ruido-bajo">🔉 Ruido natural bajo</span>
+          <span class="ltag ltag-accesible">♿ Varía por parque</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="museo cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">🏛️</div>
+          <div class="lugar-info"><h4>Museos provinciales y municipales</h4><div class="lugar-loc">📍 Todo el país</div></div>
+        </div>
+        <div class="lugar-desc">La mayoría de los museos públicos de las provincias ofrecen entrada gratuita con CUD. Muchos tienen programas de visitas guiadas adaptadas o "horas tranquilas" sin música ni grupos grandes. Consultá antes de ir.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: entrada gratuita en la mayoría</span>
+          <span class="ltag ltag-cerrado">🏠 Espacio cerrado</span>
+          <span class="ltag ltag-horario">⏰ Mejor: entre semana a la mañana</span>
+        </div>
+      </div>
+
+      <div class="lugar-card" data-type="deporte cud">
+        <div class="lugar-top">
+          <div class="lugar-emoji">⚽</div>
+          <div class="lugar-info"><h4>Deporte adaptado municipal</h4><div class="lugar-loc">📍 Todo el país · Municipios</div></div>
+        </div>
+        <div class="lugar-desc">Fútbol adaptado, boccia, atletismo, básquet en silla: los municipios tienen programas de deporte adaptado gratuitos o bonificados con CUD. Son espacios muy estructurados, con reglas claras —algo que suele funcionar muy bien.</div>
+        <div class="lugar-tags">
+          <span class="ltag ltag-cud">🎫 CUD: gratuito o bonificado</span>
+          <span class="ltag ltag-abierto">☁️ Abierto o cerrado según deporte</span>
+          <span class="ltag ltag-accesible">♿ Adaptado por definición</span>
+        </div>
+      </div>
+
+      <div class="tip-box" style="margin-top:1.2rem">
+        <div class="tip-icon">💡</div>
+        <div>
+          <h4>Consejo antes de salir</h4>
+          <p>Antes de ir a cualquier lugar nuevo, mostrarle fotos o un video corto del espacio puede reducir mucho la ansiedad anticipatoria. Google Maps tiene fotos interiores de muchos lugares. Ese "adelanto visual" vale más que cualquier preparación verbal.</p>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-icon">🌿</div>
+        <div>
+          <h4>¿Conocés un lugar que debería estar acá?</h4>
+          <p>Escribinos a <strong>@puentesdecuidado</strong> y lo sumamos con tu experiencia.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: LECTURAS ══ -->
+  <div class="side-panel" id="panel-lecturas">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('lecturas')">←</button>
+      <div><h2>Lecturas 📚</h2><p>Para entender, sentir y acompañarse</p></div>
+    </div>
+
+    <div class="lec-filter">
+      <button class="lecf-btn active" onclick="filterLecturas('todos',this)">Todas</button>
+      <button class="lecf-btn" onclick="filterLecturas('periodismo',this)">📰 Periodismo</button>
+      <button class="lecf-btn" onclick="filterLecturas('academia',this)">🔬 Investigación</button>
+      <button class="lecf-btn" onclick="filterLecturas('novela',this)">📖 Literatura</button>
+      <button class="lecf-btn" onclick="filterLecturas('infantil',this)">🌟 Para los chicos</button>
+    </div>
+
+    <div class="panel-body" style="padding-top:0.9rem">
+
+      <!-- ── PERIODISMO ── -->
+      <div class="section-sep">📰 Periodismo</div>
+
+      <div class="lectura-card" data-type="periodismo">
+        <div class="lec-spine periodismo"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo periodismo">Periodismo</span><span class="lec-tematica">Autismo · Derechos · Argentina</span></div>
+          <div class="lec-titulo">Ian Moche: el activista autista de 12 años en el centro de la tormenta</div>
+          <div class="lec-autor">La Nación · 2025</div>
+          <div class="lec-desc">La historia de Ian, niño autista y activista, y su madre Marlene, tras el escándalo con el exdirector de ANDIS que dijo que tener un hijo con discapacidad era "un problema de la familia, no del Estado". Una crónica sobre dignidad y resistencia.</div>
+          <div class="lec-footer"><span class="lec-para">Para familias, para entender el contexto político</span><a class="lec-link" href="https://www.lanacion.com.ar/sociedad/quien-es-ian-moche-el-activista-autista-de-12-anos-que-se-convirtio-en-centro-de-los-dardos-de-milei-nid02062025/" target="_blank">Leer →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="periodismo">
+        <div class="lec-spine periodismo"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo periodismo">Periodismo</span><span class="lec-tematica">Autismo · Diagnóstico · Argentina</span></div>
+          <div class="lec-titulo">Cómo se llega al diagnóstico de autismo y cuáles son los desafíos</div>
+          <div class="lec-autor">La Nación · febrero 2026</div>
+          <div class="lec-desc">El espectro autista visibilizó perfiles antes inadvertidos, pero también exige rigor para evitar diagnósticos apresurados. Una nota clave para familias que están en el camino al diagnóstico.</div>
+          <div class="lec-footer"><span class="lec-para">Para quienes están buscando respuestas</span><a class="lec-link" href="https://www.lanacion.com.ar/sociedad/esta-dentro-del-espectro-por-que-hay-cada-vez-hay-mas-diagnosticos-de-autismo-y-las-consecuencias-nid26022026/" target="_blank">Leer →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="periodismo">
+        <div class="lec-spine periodismo"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo periodismo">Periodismo</span><span class="lec-tematica">Autismo · Justicia · Inclusión educativa</span></div>
+          <div class="lec-titulo">Autismo, un fallo paradigmático</div>
+          <div class="lec-autor">La Nación · enero 2026</div>
+          <div class="lec-desc">El fallo del Juzgado de Garantías del Joven N° 3 de La Plata que ordenó incluir a dos hermanos con autismo en una escuela que los había rechazado. Un caso que sienta precedente para miles de familias argentinas.</div>
+          <div class="lec-footer"><span class="lec-para">Para entender derechos educativos</span><a class="lec-link" href="https://www.lanacion.com.ar/editoriales/autismo-un-fallo-paradigmatico-nid11012026/" target="_blank">Leer →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="periodismo">
+        <div class="lec-spine periodismo"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo periodismo">Periodismo</span><span class="lec-tematica">Autismo · Concienciación</span></div>
+          <div class="lec-titulo">Día de la Concientización sobre el Autismo: qué significa estar dentro del espectro</div>
+          <div class="lec-autor">La Nación · abril 2025</div>
+          <div class="lec-desc">Una introducción accesible al espectro autista, sus distintas manifestaciones y cómo identificarlas en diferentes etapas de la vida. Útil para compartir con familia extendida o docentes.</div>
+          <div class="lec-footer"><span class="lec-para">Para explicarle a otros qué es el TEA</span><a class="lec-link" href="https://www.lanacion.com.ar/sociedad/dia-de-la-concientizacion-sobre-el-autismo-por-que-se-celebra-hoy-y-que-significa-estar-dentro-del-nid02042025/" target="_blank">Leer →</a></div>
+        </div>
+      </div>
+
+      <!-- ── INVESTIGACIÓN ── -->
+      <div class="section-sep" style="margin-top:1.2rem">🔬 Investigación y divulgación</div>
+
+      <div class="lectura-card" data-type="academia">
+        <div class="lec-spine academia"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo academia">Libro · Ensayo</span><span class="lec-tematica">Autismo · Familias · Argentina</span></div>
+          <div class="lec-titulo">#Autismos: de madres, terapeutas y desafíos compartidos</div>
+          <div class="lec-autor">Cintia Fritz y Daniel Valdez · Paidós · Argentina</div>
+          <div class="lec-desc">Dos voces en diálogo: una mamá argentina con un hijo autista y un psicólogo clínico. Capítulos personales y técnicos entrelazados, que se refuerzan mutuamente. El libro más situado en la realidad argentina sobre vivir y acompañar el autismo.</div>
+          <div class="lec-footer"><span class="lec-para">Para familias y profesionales · El más recomendado en Argentina</span><a class="lec-link" href="https://www.planetadelibros.com.ar/libro-autismos/343853" target="_blank">Ver libro →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="academia">
+        <div class="lec-spine academia"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo academia">Libro · Divulgación</span><span class="lec-tematica">Autismo · Identidad · Neurodiversidad</span></div>
+          <div class="lec-titulo">Seres humanos únicos</div>
+          <div class="lec-autor">Barry M. Prizant · Ediciones Mensajero</div>
+          <div class="lec-desc">El doctor Prizant propone ver el autismo no como una enfermedad sino como una forma diferente de ser humano. Testimonios reales, enfoque SCERTS, y una mirada que muchas familias describen como un antes y un después en cómo ven a su hijo.</div>
+          <div class="lec-footer"><span class="lec-para">Para padres y madres que necesitan una mirada nueva</span><a class="lec-link" href="https://apanate.org/libros-imprescindibles-sobre-al-autismo-el-top-10/" target="_blank">Ver reseña →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="academia">
+        <div class="lec-spine academia"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo academia">Libro · Testimonio</span><span class="lec-tematica">Autismo · Primera persona</span></div>
+          <div class="lec-titulo">¿Por qué salto?</div>
+          <div class="lec-autor">Naoki Higashida · Alianza Editorial</div>
+          <div class="lec-desc">Escrito por un joven autista japonés con altas necesidades de apoyo, que se comunica con esfuerzo a través del texto. Responde 53 preguntas sobre estereotipos y conductas del autismo. Una ventana directa a cómo se siente desde adentro.</div>
+          <div class="lec-footer"><span class="lec-para">Para entender cómo percibe el mundo tu hijo/a</span><a class="lec-link" href="https://psicologiaymente.com/clinica/libros-autismo" target="_blank">Ver reseña →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="academia">
+        <div class="lec-spine academia"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo academia">Libro · Divulgación</span><span class="lec-tematica">Autismo · TEA en 55 preguntas</span></div>
+          <div class="lec-titulo">El autismo explicado a los no autistas</div>
+          <div class="lec-autor">Brigitte Harrisson, Lise St-Charles y Kim Thúy</div>
+          <div class="lec-desc">55 preguntas y respuestas que suelen hacerse las familias: ¿por qué hace gestos repetitivos? ¿cómo percibe el mundo? Escrito con perspectiva científica y de primera persona por una de sus autoras, que es autista. Muy claro y accesible.</div>
+          <div class="lec-footer"><span class="lec-para">Para el momento del diagnóstico y para compartir</span><a class="lec-link" href="https://www.casadellibro.com/libros-dia-autismo" target="_blank">Ver libro →</a></div>
+        </div>
+      </div>
+
+      <!-- ── LITERATURA ── -->
+      <div class="section-sep" style="margin-top:1.2rem">📖 Literatura para adultos</div>
+
+      <div class="lectura-card" data-type="novela">
+        <div class="lec-spine novela"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo novela">Cómic / Novela gráfica</span><span class="lec-tematica">Autismo · Familia · Testimonio</span></div>
+          <div class="lec-titulo">María y yo</div>
+          <div class="lec-autor">Miguel Gallardo · Astiberri</div>
+          <div class="lec-desc">Un padre dibuja unas vacaciones con María, su hija autista de 12 años. Como María entiende el mundo a través de imágenes, Miguel nos habla también en imágenes. Ganador del Premio Nacional del Cómic de Cataluña. Fue también documental nominado a los Goya.</div>
+          <div class="lec-footer"><span class="lec-para">Para padres y madres que necesitan sentirse vistos</span><a class="lec-link" href="https://www.astiberri.com/products/maria-y-yo" target="_blank">Ver libro →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="novela">
+        <div class="lec-spine novela"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo novela">Novela</span><span class="lec-tematica">Autismo · Adolescencia · Familia</span></div>
+          <div class="lec-titulo">El curioso incidente del perro a medianoche</div>
+          <div class="lec-autor">Mark Haddon · Salamandra</div>
+          <div class="lec-desc">Christopher tiene 15 años, ama las matemáticas y resuelve el misterio del perro muerto de su vecina como si fuera Sherlock Holmes. Narrada en primera persona desde su mente, es una de las mejores ventanas literarias a la forma de pensar autista. Premio Whitbread 2003.</div>
+          <div class="lec-footer"><span class="lec-para">Para entender la lógica interna de tu hijo/a</span><a class="lec-link" href="https://www.casadellibros.com/libro-el-curioso-incidente-del-perro-a-medianoche/9788478889105/981512" target="_blank">Ver libro →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="novela">
+        <div class="lec-spine novela"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo novela">Novela</span><span class="lec-tematica">Discapacidad · Maternidad · Crianza</span></div>
+          <div class="lec-titulo">Todo lo que nunca te dije</div>
+          <div class="lec-autor">Celeste Ng · Salamandra</div>
+          <div class="lec-desc">Una familia marcada por las diferencias, las expectativas no dichas y el amor silencioso que no siempre alcanza. Aunque no trata el autismo directamente, muchas familias con hijos con discapacidad la reconocen como propia: la culpa, el duelo, la identidad perdida del cuidador.</div>
+          <div class="lec-footer"><span class="lec-para">Para el duelo y la identidad del cuidador</span><a class="lec-link" href="https://www.casadellibro.com/libro-todo-lo-que-nunca-te-dije/9788498388213/2473619" target="_blank">Ver libro →</a></div>
+        </div>
+      </div>
+
+      <!-- ── INFANTIL ── -->
+      <div class="section-sep" style="margin-top:1.2rem">🌟 Para leer con los chicos</div>
+
+      <div class="tip-box" style="margin-bottom:1rem">
+        <div class="tip-icon">💡</div>
+        <div><h4>¿Para qué sirven estos libros?</h4><p>Para que los hermanos entiendan, para que los compañeros de escuela conozcan, para que el propio chico o chica se vea reflejado. Y también para que el cuidador tenga palabras para explicar lo que a veces no sabe cómo decir.</p></div>
+      </div>
+
+      <div class="lectura-card" data-type="infantil">
+        <div class="lec-spine infantil"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo infantil">Cuento infantil</span><span class="lec-tematica">Autismo · Identidad · 4–10 años</span></div>
+          <div class="lec-titulo">Bet y el TEA</div>
+          <div class="lec-autor">Autismo España · Kalandraka · Gratis online</div>
+          <div class="lec-desc">Bet es una niña divertida, cariñosa y muy revoltosa que tiene autismo. Ella misma cuenta sus particularidades. Los chicos aprenden qué es el TEA y cómo pueden ayudar. Disponible gratis en video y papel. Ideal para introducir el tema en el jardín o la primaria.</div>
+          <div class="lec-footer"><span class="lec-para">Para leer en clase o con hermanos · Gratis en video</span><a class="lec-link" href="https://autismo.org.es/wp-content/uploads/2023/04/2023_Listado_LibrosCuentos_AutismoEspana.pdf" target="_blank">Ver lista completa →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="infantil">
+        <div class="lec-spine infantil"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo infantil">Cuento infantil</span><span class="lec-tematica">Diversidad · Inclusión · 3–8 años</span></div>
+          <div class="lec-titulo">Por cuatro esquinitas de nada</div>
+          <div class="lec-autor">Jérôme Ruillier · Juventud</div>
+          <div class="lec-desc">Cuadradito quiere entrar a la casa de sus amigos redondos, pero no encaja por la forma. Los amigos encuentran la solución sin cambiar a Cuadradito: modifican la puerta. Una metáfora preciosa sobre inclusión, adaptación y diversidad. Clásico para sala de 5 en adelante.</div>
+          <div class="lec-footer"><span class="lec-para">Para hablar de diferencia e inclusión desde chicos</span><a class="lec-link" href="https://vadecuentos.com/cuentos-autismo/" target="_blank">Ver reseña →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="infantil">
+        <div class="lec-spine infantil"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo infantil">Cuento infantil</span><span class="lec-tematica">Autismo · Hermanos · 6–12 años</span></div>
+          <div class="lec-titulo">El hermano de Carlos</div>
+          <div class="lec-autor">Autismo España</div>
+          <div class="lec-desc">Javier nos acerca al mundo de su hermano Carlos y muestra cómo ha asumido esa realidad con naturalidad y amor. Pensado especialmente para hermanos sin diagnóstico que necesitan entender qué le pasa al otro miembro de la familia.</div>
+          <div class="lec-footer"><span class="lec-para">Especialmente para hermanos</span><a class="lec-link" href="https://autismo.org.es/wp-content/uploads/2023/04/2023_Listado_LibrosCuentos_AutismoEspana.pdf" target="_blank">Ver lista completa →</a></div>
+        </div>
+      </div>
+
+      <div class="lectura-card" data-type="infantil">
+        <div class="lec-spine infantil"></div>
+        <div class="lec-body">
+          <div class="lec-meta"><span class="lec-tipo infantil">Cuento / Álbum ilustrado</span><span class="lec-tematica">Autismo · Comunicación · 5–10 años</span></div>
+          <div class="lec-titulo">Lucas tiene superpoderes</div>
+          <div class="lec-autor">Autismo España</div>
+          <div class="lec-desc">Una tarde en la vida de Lucas, donde lo que para otros parece una conducta extraña puede ser en realidad una gran habilidad. Un libro que resignifica la diferencia y ayuda a los chicos a no juzgar lo que no entienden.</div>
+          <div class="lec-footer"><span class="lec-para">Para chicos que conviven con TEA en el aula</span><a class="lec-link" href="https://autismo.org.es/wp-content/uploads/2023/04/2023_Listado_LibrosCuentos_AutismoEspana.pdf" target="_blank">Ver lista completa →</a></div>
+        </div>
+      </div>
+
+      <div class="tip-box" style="margin-top:1.5rem">
+        <div class="tip-icon">🌿</div>
+        <div><h4>¿Querés recomendar una lectura?</h4><p>Si leíste algo que te cambió la perspectiva o que te acompañó en un momento difícil, compartilo con <strong>@puentesdecuidado</strong> y lo sumamos acá.</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CRISIS FAB -->
+  <button class="crisis-fab" onclick="toggleCrisis()" title="Necesito ayuda ahora">🆘</button>
+
+  <!-- CRISIS SHEET -->
+  <div class="crisis-panel-overlay" id="crisis-overlay" onclick="closeCrisisOutside(event)">
+    <div class="crisis-sheet">
+      <h3>¿Necesitás ayuda ahora mismo?</h3>
+      <p>No tenés que estar en el peor momento para pedir ayuda. Si sentís que no podés más, estas opciones están disponibles ahora.</p>
+      <div class="crisis-actions">
+        <a class="crisis-action" href="tel:135">
+          <span class="ca-icon">📞</span>
+          <div class="ca-text"><h4>Llamar al 135</h4><p>Centro de Asistencia al Suicida · Gratuito · 24hs</p></div>
+        </a>
+        <div class="crisis-action" onclick="closeCrisis();sendQuick('Necesito hablar, no puedo más')">
+          <span class="ca-icon">🌿</span>
+          <div class="ca-text"><h4>Hablar con Lena ahora</h4><p>Te escucha sin juzgarte</p></div>
+        </div>
+        <div class="crisis-action" onclick="closeCrisis();showPanel('ejercicios')">
+          <span class="ca-icon">🧘</span>
+          <div class="ca-text"><h4>Hacer un ejercicio de regulación</h4><p>Para bajar la intensidad de este momento</p></div>
+        </div>
+        <a class="crisis-action" href="https://www.argentina.gob.ar/salud/salud-mental" target="_blank">
+          <span class="ca-icon">🏥</span>
+          <div class="ca-text"><h4>Salud Mental Argentina</h4><p>Recursos y centros de atención</p></div>
+        </a>
+      </div>
+      <button class="crisis-close" onclick="closeCrisis()">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- ══ PANEL: CUANDO TODAVÍA NO HAY NOMBRE ══ -->
+  <div class="side-panel" id="panel-sindx">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('sindx')">←</button>
+      <div><h2>Cuando todavía no hay nombre 🌱</h2><p>Para el momento en que algo te dice que algo pasa</p></div>
+    </div>
+    <div class="panel-body">
+
+      <div class="sin-dx-box" style="margin-bottom:1.1rem">
+        <h3>No estás sola/solo en este momento</h3>
+        <p>Ese instinto que te dice que algo pasa —antes de cualquier diagnóstico, antes de cualquier papel— es válido y merece ser escuchado. Este espacio es para acompañarte en ese camino.</p>
+      </div>
+
+      <div class="section-sep">🩺 Primeros pasos para buscar orientación</div>
+
+      <div class="sin-dx-steps" style="margin-bottom:1.2rem">
+        <div class="sdx-step">
+          <div class="sdx-num">1</div>
+          <div class="sdx-text">Pedile al <strong>pediatra</strong> una derivación a neurología infantil o desarrollo madurativo. Podés decirle exactamente: <em>"Noto estas conductas: [describí lo que ves]. ¿Podemos hacer una evaluación?"</em></div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num">2</div>
+          <div class="sdx-text">Solicitá una <strong>evaluación en el jardín o escuela</strong> al equipo de orientación escolar (EOE o gabinete). Tienen obligación de evaluar si hay señales de alerta.</div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num">3</div>
+          <div class="sdx-text">Mientras esperás turno, <strong>anotá lo que observás</strong>: cómo juega, cómo duerme, cómo se relaciona, qué le gusta, qué le molesta, qué lo desregula. Eso vale oro en la consulta.</div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num">4</div>
+          <div class="sdx-text">Si la obra social demora, podés pedir turno en el <strong>hospital público de referencia</strong> de tu zona. Los equipos de neurodesarrollo tienen tiempos largos pero existen.</div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num">5</div>
+          <div class="sdx-text"><strong>No necesitás un diagnóstico para empezar</strong>. Podés explorar qué le funciona a tu hijo, buscar comunidad, y cuidarte vos también. Lena está acá para acompañarte en todo eso.</div>
+        </div>
+      </div>
+
+      <div class="section-sep">❓ Señales frecuentes de alerta (en niños pequeños)</div>
+
+      <div class="lugar-card" data-type="" style="margin-bottom:0.75rem">
+        <div class="lugar-top" style="padding-bottom:0.5rem">
+          <div class="lugar-emoji" style="font-size:1.1rem">👁️</div>
+          <div class="lugar-info"><h4 style="font-size:0.95rem">Comunicación y lenguaje</h4></div>
+        </div>
+        <div class="lugar-desc" style="padding-top:0">No señala con el dedo para mostrar cosas, no responde a su nombre con frecuencia, retraso o pérdida del lenguaje, habla pero no para comunicarse (repite frases de memoria, por ejemplo).</div>
+      </div>
+
+      <div class="lugar-card" data-type="" style="margin-bottom:0.75rem">
+        <div class="lugar-top" style="padding-bottom:0.5rem">
+          <div class="lugar-emoji" style="font-size:1.1rem">🤝</div>
+          <div class="lugar-info"><h4 style="font-size:0.95rem">Interacción social</h4></div>
+        </div>
+        <div class="lugar-desc" style="padding-top:0">Poco contacto visual, dificultad para jugar con otros niños, parece "estar en su mundo", no imita gestos o expresiones, no comparte intereses o atención conjunta.</div>
+      </div>
+
+      <div class="lugar-card" data-type="" style="margin-bottom:0.75rem">
+        <div class="lugar-top" style="padding-bottom:0.5rem">
+          <div class="lugar-emoji" style="font-size:1.1rem">🔄</div>
+          <div class="lugar-info"><h4 style="font-size:0.95rem">Conductas repetitivas y rutinas</h4></div>
+        </div>
+        <div class="lugar-desc" style="padding-top:0">Movimientos repetitivos (sacudir manos, balancearse), insistencia en las mismas rutinas o juegos, reacciones muy intensas a pequeños cambios, fascinación por partes de objetos.</div>
+      </div>
+
+      <div class="lugar-card" data-type="" style="margin-bottom:0.75rem">
+        <div class="lugar-top" style="padding-bottom:0.5rem">
+          <div class="lugar-emoji" style="font-size:1.1rem">🌡️</div>
+          <div class="lugar-info"><h4 style="font-size:0.95rem">Sensorialidad</h4></div>
+        </div>
+        <div class="lugar-desc" style="padding-top:0">Mucha sensibilidad o poca sensibilidad al ruido, la luz, las texturas o el dolor. Se tapa las orejas frecuentemente, evita ciertos alimentos por textura, busca o evita el contacto físico de forma intensa.</div>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-icon">💛</div>
+        <div>
+          <h4>Estas señales no son un diagnóstico</h4>
+          <p>Presencia de algunas no significa nada definitivo, y ausencia de todas tampoco descarta nada. Solo un equipo especializado puede evaluar. Lo que sí significa es que tu instinto tiene razón en prestar atención.</p>
+        </div>
+      </div>
+
+      <div class="section-sep" style="margin-top:1.2rem">🤝 A quién acudir</div>
+
+      <div class="sin-dx-steps" style="margin-bottom:1.2rem">
+        <div class="sdx-step">
+          <div class="sdx-num" style="background:var(--sage)">A</div>
+          <div class="sdx-text"><strong>Pediatra de cabecera</strong> — primer paso siempre. Pedí derivación explícita a neurodesarrollo o neurología infantil.</div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num" style="background:var(--sage)">B</div>
+          <div class="sdx-text"><strong>ANDIS (ex ANSES + CUD)</strong> — aunque sin diagnóstico no podés tramitar CUD, podés consultar por orientación y derivación a equipos de evaluación: 0800-333-2634.</div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num" style="background:var(--sage)">C</div>
+          <div class="sdx-text"><strong>APAdeA</strong> — ofrecen asesoramiento gratuito a familias que están en el camino al diagnóstico. Instagram: @apadeacentral.</div>
+        </div>
+        <div class="sdx-step">
+          <div class="sdx-num" style="background:var(--sage)">D</div>
+          <div class="sdx-text"><strong>Hospital público de referencia</strong> — los servicios de pediatría y neurodesarrollo de hospitales como el Garrahan (CABA) o los provinciales tienen equipos especializados.</div>
+        </div>
+      </div>
+
+      <div class="tip-box">
+        <div class="tip-icon">🌿</div>
+        <div>
+          <h4>Lena puede acompañarte en este camino</h4>
+          <p>Si querés hablar de lo que estás viviendo, o necesitás orientación más personalizada, volvé al chat y contale a Lena dónde estás. No hay que tener diagnóstico para merecer acompañamiento.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: PARA VOS (AUTOCUIDADO) ══ -->
+  <div class="side-panel" id="panel-autocuidado">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('autocuidado')">←</button>
+      <div><h2>Para vos 🫀</h2><p>Porque quien cuida también necesita ser cuidado</p></div>
+    </div>
+    <div class="panel-body">
+
+      <div class="sin-dx-box" style="margin-bottom:1.1rem">
+        <h3>Lo que hacés tiene un nombre: trabajo</h3>
+        <p>Cuidar a un hijo con discapacidad es trabajo. No es solo amor, no es solo vocación — es trabajo real, de todos los días, que casi nadie ve y que el sistema nunca reconoció. Empezar por nombrarlo así cambia algo.</p>
+      </div>
+
+      <div class="section-sep">🔥 ¿Estás en burnout?</div>
+
+      <div class="auto-card" id="ac1">
+        <div class="auto-header" onclick="toggleAuto('ac1')">
+          <div class="auto-icon" style="background:rgba(196,120,90,0.1)">🔥</div>
+          <div><div class="auto-title">Señales de burnout del cuidador</div><div class="auto-sub">No es debilidad — es la respuesta lógica a una carga injusta</div></div>
+          <span class="auto-arrow">▾</span>
+        </div>
+        <div class="auto-body"><div class="auto-content">
+          <p class="auto-intro">El agotamiento del cuidador no es un problema de actitud. Es lo que pasa cuando una persona carga sola con algo que debería repartirse entre muchos. Reconocerlo no es quejarse — es ver la realidad.</p>
+          <div class="burnout-check">
+            <div class="bc-item"><div class="bc-dot"></div>Sentís que ya no podés más, pero seguís igual porque no hay otra</div>
+            <div class="bc-item"><div class="bc-dot"></div>Te enojás con tu hijo/a por cosas pequeñas y después viene la culpa</div>
+            <div class="bc-item"><div class="bc-dot"></div>Dejaste de hacer cosas que antes te gustaban — hace meses, quizás años</div>
+            <div class="bc-item"><div class="bc-dot"></div>Dormís mal aunque estés exhausta/o</div>
+            <div class="bc-item"><div class="bc-dot"></div>Sentís que nadie entiende lo que es tu vida — y probablemente tenés razón</div>
+            <div class="bc-item"><div class="bc-dot"></div>Postergaste tu propia salud indefinidamente</div>
+            <div class="bc-item"><div class="bc-dot"></div>Ya no sabés bien quién eras antes de ser "la mamá de" o "el papá de"</div>
+          </div>
+          <div class="faq-tip">Nada de esto es tu culpa. Es lo que pasa cuando el sistema te deja sola/solo con algo demasiado grande. Nombrarlo es el primer paso.</div>
+        </div></div>
+      </div>
+
+      <div class="auto-card" id="ac2">
+        <div class="auto-header" onclick="toggleAuto('ac2')">
+          <div class="auto-icon" style="background:rgba(212,149,122,0.12)">🪞</div>
+          <div><div class="auto-title">La culpa que te enseñaron</div><div class="auto-sub">No la inventaste vos — te la enseñaron desde chica</div></div>
+          <span class="auto-arrow">▾</span>
+        </div>
+        <div class="auto-body"><div class="auto-content">
+          <p class="auto-intro">Esa culpa que aparece cuando te cansás, cuando querés un rato sola, cuando pensás en vos — no la inventaste vos. Te la fueron enseñando desde chica: que tu valor está en cuánto das, cuánto aguantás, cuánto te entregás a los demás.</p>
+          <div class="burnout-check">
+            <div class="bc-item"><div class="bc-dot"></div><span>Te culpás por cansarte de algo que agotaría a cualquiera</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Sentís que necesitar algo para vos es un lujo que no te podés permitir</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Cuando alguien te pregunta cómo estás vos, no sabés qué responder</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Esperás que alguien note que estás al límite sin tener que decirlo</span></div>
+          </div>
+          <div class="faq-tip">Borrarse no es amor — es algo que te enseñaron a hacer. Pedir, descansar, existir más allá de ser mamá o papá, no te hace peor persona. Te hace una persona.</div>
+        </div></div>
+      </div>
+
+      <div class="auto-card" id="ac3">
+        <div class="auto-header" onclick="toggleAuto('ac3')">
+          <div class="auto-icon" style="background:rgba(122,158,138,0.12)">🙋</div>
+          <div><div class="auto-title">Pedir ayuda no es rendirse</div><div class="auto-sub">La independencia forzada tampoco es una virtud</div></div>
+          <span class="auto-arrow">▾</span>
+        </div>
+        <div class="auto-body"><div class="auto-content">
+          <p class="auto-intro">Una de las trampas más comunes es la autosuficiencia como identidad: "yo puedo sola/solo, no necesito a nadie". Pero eso no es fortaleza — es otra forma de cargar con lo que debería repartirse.</p>
+          <div class="sin-dx-steps">
+            <div class="sdx-step"><div class="sdx-num">1</div><div class="sdx-text">Hacé una lista de <strong>tres cosas concretas</strong> en las que alguien podría ayudarte esta semana. No "ayudarme con todo" — algo específico: buscar al chico, hacer una compra, quedarse dos horas.</div></div>
+            <div class="sdx-step"><div class="sdx-num">2</div><div class="sdx-text">Cuando alguien diga "avisame si necesitás algo" — <strong>avisale</strong>. Esa persona lo dijo en serio. La mayoría no sabe cómo ayudar sin que se lo digan. No es indiferencia — es que no ven lo que vos vivís desde adentro.</div></div>
+            <div class="sdx-step"><div class="sdx-num">3</div><div class="sdx-text">Si tenés obra social, <strong>pedí derivación a psicología para vos</strong>. No para hablar del hijo — para hablar de lo que te pasa a vos. Estás bajo estrés crónico y eso tiene tratamiento.</div></div>
+            <div class="sdx-step"><div class="sdx-num">4</div><div class="sdx-text">Buscá otros padres y madres que sepan exactamente lo que es. Las cuentas en 🌐 Redes pueden orientarte. <strong>Ser visto/a por alguien que vivió lo mismo</strong> vale más que cualquier consejo externo.</div></div>
+          </div>
+        </div></div>
+      </div>
+
+      <div class="auto-card" id="ac4">
+        <div class="auto-header" onclick="toggleAuto('ac4')">
+          <div class="auto-icon" style="background:rgba(107,76,59,0.1)">💔</div>
+          <div><div class="auto-title">El duelo que nadie nombra</div><div class="auto-sub">Llorar lo que imaginabas no te hace mala persona</div></div>
+          <span class="auto-arrow">▾</span>
+        </div>
+        <div class="auto-body"><div class="auto-content">
+          <p class="auto-intro">Cuando llega un diagnóstico —o la sospecha de uno— muchos padres y madres atraviesan un duelo real y silencioso. No por el hijo que tienen, a quien aman profundamente, sino por el hijo que imaginaban. Ese duelo es válido. No lo cancela el amor.</p>
+          <div class="burnout-check">
+            <div class="bc-item"><div class="bc-dot"></div><span>Tristeza por los futuros que imaginabas y que quizás van a ser diferentes</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Culpa inmediata por sentir esa tristeza —como si amarlos bien significara no extrañar nada</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Enojo: con el sistema, con el diagnóstico, con vos mismo/a, con la injusticia</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Momentos de aceptación y orgullo genuino, seguidos de días de agotamiento total</span></div>
+          </div>
+          <div class="faq-tip">El duelo no tiene orden ni fecha de cierre. Podés amar a tu hijo con toda la fuerza y al mismo tiempo llorar la vida que imaginabas. Las dos cosas son verdad al mismo tiempo. No hay contradicción.</div>
+        </div></div>
+      </div>
+
+      <div class="auto-card" id="ac5">
+        <div class="auto-header" onclick="toggleAuto('ac5')">
+          <div class="auto-icon" style="background:rgba(212,149,122,0.1)">✨</div>
+          <div><div class="auto-title">Recordar quién sos además de cuidador/a</div><div class="auto-sub">Tu identidad no desapareció — quedó enterrada bajo la urgencia</div></div>
+          <span class="auto-arrow">▾</span>
+        </div>
+        <div class="auto-body"><div class="auto-content">
+          <p class="auto-intro">El cuidado intensivo puede hacer desaparecer la persona que sos. De a poco dejás de ser vos para ser solo "la mamá de" o "el papá de". Y a veces alguien te dice "date un gustito, hacete las uñas" — como si eso alcanzara para todo lo que perdiste en el camino.</p>
+          <div class="burnout-check">
+            <div class="bc-item"><div class="bc-dot"></div><span>Recuperarte no es comprarte algo ni arreglarte</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Es poder tener una charla donde no hables de tu hijo ni un minuto</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Es poder estar mal sin tener que explicarle a nadie por qué</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Es ocupar un lugar en una habitación sin que sea para resolver algo de alguien más</span></div>
+            <div class="bc-item"><div class="bc-dot"></div><span>Es el derecho a no estar bien hoy, sin más</span></div>
+          </div>
+          <div class="faq-tip">El "yo" — ese que quedó enterrado bajo la urgencia — no se recupera en un spa. Se recupera en pequeños momentos de existir para vos, sin que nadie te esté mirando y sin que tenga que servir para algo.</div>
+        </div></div>
+      </div>
+
+      <div class="tip-box" style="margin-top:0.5rem">
+        <div class="tip-icon">🌿</div>
+        <div><h4>Lena también puede escucharte a vos</h4><p>No solo al cuidador que busca recursos — a la persona que está adentro del rol. Volvé al chat y contale cómo estás hoy vos.</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: PREGUNTAS FRECUENTES ══ -->
+  <div class="side-panel" id="panel-faq">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('faq')">←</button>
+      <div><h2>Preguntas frecuentes ❓</h2><p>Las dudas que todos tienen pero pocos saben dónde responder</p></div>
+    </div>
+    <div class="panel-body">
+
+      <div class="section-sep">🎫 CUD y trámites</div>
+
+      <div class="faq-card" id="faq1">
+        <div class="faq-q" onclick="toggleFaq('faq1')">
+          <span class="fq-icon">🎫</span>
+          <span class="fq-text">¿Cómo saco el CUD por primera vez?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          El CUD (Certificado Único de Discapacidad) se tramita en el ANDIS (ex-ANDIS). Necesitás:<br><br>
+          <strong>Documentación básica:</strong> DNI del titular, certificado médico o historia clínica que acredite la discapacidad, y formulario de solicitud (se consigue en la web de ANDIS o en la sede).<br><br>
+          <strong>Pasos:</strong> Pedí turno en <a href="https://www.argentina.gob.ar/andis" target="_blank" style="color:var(--terracotta)">www.argentina.gob.ar/andis</a>, asistí con la documentación, y una junta evaluadora determina la certificación. El trámite es gratuito.<br><br>
+          <div class="faq-tip">💡 Si te rechazan o tardan más de lo razonable, podés consultar a APAdeA o REDI gratuitamente.</div>
+        </div></div>
+      </div>
+
+      <div class="faq-card" id="faq2">
+        <div class="faq-q" onclick="toggleFaq('faq2')">
+          <span class="fq-icon">🔄</span>
+          <span class="fq-text">¿Cuándo y cómo se renueva el CUD?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          El CUD tiene vencimiento (generalmente 1, 2 o 5 años según el caso). <strong>Podés renovarlo hasta 90 días antes</strong> del vencimiento sin perder la vigencia actual.<br><br>
+          El trámite es similar al inicial: turno en ANDIS, documentación actualizada, nueva evaluación. En condiciones permanentes suele ser más ágil.<br><br>
+          <div class="faq-tip">💡 Anotá la fecha de vencimiento en el 📅 Calendario de esta app para que no se te pase.</div>
+        </div></div>
+      </div>
+
+      <div class="faq-card" id="faq3">
+        <div class="faq-q" onclick="toggleFaq('faq3')">
+          <span class="fq-icon">🚫</span>
+          <span class="fq-text">La obra social me rechazó una prestación. ¿Qué hago?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          Primero: el rechazo debe ser <strong>por escrito y fundado</strong>. Si te lo dijeron de palabra, pedí que te lo den por escrito — ese es el primer paso.<br><br>
+          Segundo: presentá un <strong>recurso de reconsideración</strong> adjuntando prescripción médica, informe del especialista y la Ley 24.901 (que obliga a la cobertura integral).<br><br>
+          Si siguen rechazando: <strong>Superintendencia de Servicios de Salud: 0800-222-7272</strong> (gratuito). Podés hacer la denuncia ahí y también por la web.<br><br>
+          <div class="faq-tip">💡 REDI (@rediscapacidad) tiene asesoramiento jurídico gratuito para estos casos.</div>
+        </div></div>
+      </div>
+
+      <div class="section-sep" style="margin-top:1.2rem">🏫 Educación</div>
+
+      <div class="faq-card" id="faq4">
+        <div class="faq-q" onclick="toggleFaq('faq4')">
+          <span class="fq-icon">👩‍🏫</span>
+          <span class="fq-text">¿Qué hago si la maestra integradora no aparece o no alcanza?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          La maestra o acompañante terapéutico (AT) en escuela común es un derecho establecido por la Ley 26.206 y la Ley 24.901.<br><br>
+          Si no aparece o hay demoras: <strong>notificá por escrito a la dirección de la escuela</strong> y al supervisor de área. Ese registro escrito es clave para cualquier reclamo posterior.<br><br>
+          Si es la obra social quien no cubre: presentá prescripción médica del especialista y hacé el reclamo formal (ver pregunta anterior).<br><br>
+          <div class="faq-tip">💡 El equipo de orientación escolar (EOE) tiene obligación de involucrarse. Pediles una reunión formal y que quede registrada.</div>
+        </div></div>
+      </div>
+
+      <div class="faq-card" id="faq5">
+        <div class="faq-q" onclick="toggleFaq('faq5')">
+          <span class="fq-icon">🏫</span>
+          <span class="fq-text">La escuela no quiere recibir a mi hijo/a. ¿Pueden hacer eso?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          <strong>No pueden.</strong> La Ley 26.206 y la Convención de Derechos de Personas con Discapacidad (Ley 26.378) garantizan la inclusión educativa.<br><br>
+          Si una escuela rechaza la inscripción, <strong>pedí el rechazo por escrito</strong> y presentá una denuncia ante la Supervisión escolar de tu distrito y ante la Defensoría del Pueblo de tu provincia.<br><br>
+          <div class="faq-tip">💡 En 2026 un fallo del Juzgado de Garantías del Joven N°3 de La Plata ordenó la inclusión de dos hermanos con autismo rechazados. Ese precedente se puede citar.</div>
+        </div></div>
+      </div>
+
+      <div class="section-sep" style="margin-top:1.2rem">💰 Prestaciones y ayuda económica</div>
+
+      <div class="faq-card" id="faq6">
+        <div class="faq-q" onclick="toggleFaq('faq6')">
+          <span class="fq-icon">💰</span>
+          <span class="fq-text">¿A qué pensiones o asignaciones tengo derecho con el CUD?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          Con CUD podés acceder a:<br><br>
+          <strong>Pensión No Contributiva por Invalidez (ANDIS):</strong> para personas con discapacidad severa sin recursos ni obra social.<br><br>
+          <strong>Asignación por Hijo con Discapacidad (ANSES):</strong> sin límite de edad ni tope de ingresos del titular (a diferencia de la AUH común). Tramitala en ANSES.<br><br>
+          <strong>Asignación Familiar por Hijo con Discapacidad:</strong> para trabajadores en relación de dependencia, sin tope de edad del hijo.<br><br>
+          <div class="faq-tip">💡 Estas prestaciones se pueden acumular en algunos casos. Consultá en ANSES y en ANDIS para ver tu situación específica.</div>
+        </div></div>
+      </div>
+
+      <div class="faq-card" id="faq7">
+        <div class="faq-q" onclick="toggleFaq('faq7')">
+          <span class="fq-icon">🚗</span>
+          <span class="fq-text">¿Hay beneficios de transporte y otros servicios con el CUD?</span>
+          <span class="fq-arrow">▾</span>
+        </div>
+        <div class="faq-a"><div class="faq-a-inner">
+          Sí, varios:<br><br>
+          <strong>Transporte público:</strong> pase libre en colectivo, tren y subte en CABA y GBA (y muchas provincias tienen normas similares).<br><br>
+          <strong>Aerolineas y transporte aéreo:</strong> descuentos y asistencia prioritaria.<br><br>
+          <strong>Parques Nacionales:</strong> ingreso gratuito para el titular y un acompañante.<br><br>
+          <strong>Museos y espacios culturales públicos:</strong> entrada gratuita en la mayoría.<br><br>
+          <strong>Estacionamiento:</strong> permiso especial para estacionar en lugares reservados.<br><br>
+          <div class="faq-tip">💡 Siempre llevá el CUD físico o digital encima. Muchos beneficios requieren presentarlo en el momento.</div>
+        </div></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: DIARIO ══ -->
+  <div class="side-panel" id="panel-diario">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('diario')">←</button>
+      <div><h2>Tu espacio 🖊️</h2><p>Para escribir sin que nadie responda</p></div>
+    </div>
+    <div class="panel-body" style="display:flex;flex-direction:column;height:100%">
+
+      <div class="sin-dx-box" style="margin-bottom:1rem;flex-shrink:0">
+        <h3>A veces solo necesitás soltar</h3>
+        <p>No hay respuestas acá. No hay consejos. Solo un lugar donde escribir lo que no podés decirle a nadie — sin filtro, sin juicio, sin que quede guardado en ningún lado.</p>
+      </div>
+
+      <textarea class="diario-area" id="diario-texto" placeholder="Escribí lo que sea. Cómo fue el día. Lo que te pesa. Lo que no podés decir en voz alta. Nadie lo va a leer.&#10;&#10;Este texto desaparece cuando cerrás la app."></textarea>
+      <div class="diario-counter" id="diario-counter">0 palabras</div>
+      <div class="diario-actions" style="flex-shrink:0">
+        <button class="diario-btn limpiar" onclick="limpiarDiario()">Borrar todo</button>
+        <button class="diario-btn enviar" onclick="enviarALena()">Hablar con Lena sobre esto</button>
+      </div>
+      <div class="diario-privacidad">🔒 Este texto existe solo en tu dispositivo. No se guarda, no se envía a ningún servidor.</div>
+
+    </div>
+  </div>
+
+  <!-- ══ PANEL: CALENDARIO ══ -->
+  <div class="side-panel" id="panel-calendario">
+    <div class="panel-header">
+      <button class="panel-back" onclick="hidePanel('calendario')">←</button>
+      <div><h2>Fechas importantes 📅</h2><p>Para no perder derechos por no saber cuándo actuar</p></div>
+    </div>
+    <div class="panel-body">
+
+      <div class="tip-box" style="margin-bottom:1rem">
+        <div class="tip-icon">💡</div>
+        <div><h4>¿Por qué un calendario?</h4><p>Muchas familias pierden prestaciones y beneficios simplemente por no saber las fechas clave. Este calendario es un recordatorio permanente.</p></div>
+      </div>
+
+      <div class="cal-month">Abril 2026</div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">2</div><div class="cd-mon">ABR</div></div>
+        <div class="cal-info">
+          <h4>Día Mundial de Concienciación sobre el Autismo</h4>
+          <p>Jornadas de visibilización en todo el país. Muchas organizaciones hacen actividades gratuitas abiertas a familias.</p>
+          <span class="cal-tag evento">Evento</span>
+        </div>
+      </div>
+
+      <div class="cal-month">Mayo 2026</div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">3</div><div class="cd-mon">MAY</div></div>
+        <div class="cal-info">
+          <h4>Día Nacional de la Convivencia en la Diversidad</h4>
+          <p>Fecha para promover la inclusión educativa. Muchas escuelas realizan actividades especiales ese día.</p>
+          <span class="cal-tag evento">Evento</span>
+        </div>
+      </div>
+
+      <div class="cal-month">Agosto 2026</div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">—</div><div class="cd-mon">AGO</div></div>
+        <div class="cal-info">
+          <h4>Revisión anual de prestaciones de obra social</h4>
+          <p>Si tu hijo/a recibe terapias cubiertas, agosto suele ser el mes de renovar prescripciones médicas anuales. Anticipate para no tener cortes de cobertura.</p>
+          <span class="cal-tag tramite">Trámite</span>
+        </div>
+      </div>
+
+      <div class="cal-month">Todo el año</div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">↻</div><div class="cd-mon"></div></div>
+        <div class="cal-info">
+          <h4>Renovación del CUD</h4>
+          <p>Podés renovarlo hasta 90 días antes del vencimiento. Mirá la fecha en tu certificado y programalo con anticipación.</p>
+          <span class="cal-tag tramite">Trámite anual</span>
+        </div>
+      </div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">↻</div><div class="cd-mon"></div></div>
+        <div class="cal-info">
+          <h4>Asignación por Hijo con Discapacidad (ANSES)</h4>
+          <p>Requiere actualización periódica del CUD vigente. Verificá en mi ANSES que el certificado cargado esté vigente.</p>
+          <span class="cal-tag tramite">Trámite</span>
+        </div>
+      </div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">↻</div><div class="cd-mon"></div></div>
+        <div class="cal-info">
+          <h4>Prescripciones médicas para terapias</h4>
+          <p>Las obras sociales suelen exigir prescripción médica anual o semestral para cubrir fonoaudiología, psicología, psicomotricidad, etc. Anticipate un mes antes del vencimiento.</p>
+          <span class="cal-tag salud">Salud</span>
+        </div>
+      </div>
+      <div class="cal-event">
+        <div class="cal-date"><div class="cd-day">↻</div><div class="cd-mon"></div></div>
+        <div class="cal-info">
+          <h4>Marzo: inicio del ciclo escolar</h4>
+          <p>El momento de confirmar maestra integradora o acompañante terapéutico para el año. No esperes a que empiecen las clases — gestionalo en febrero.</p>
+          <span class="cal-tag derechos">Educación</span>
+        </div>
+      </div>
+
+      <div class="tip-box" style="margin-top:1rem">
+        <div class="tip-icon">🌿</div>
+        <div><h4>¿Tenés una fecha que agregar?</h4><p>Escribinos a <strong>@puentesdecuidado</strong> y la sumamos para toda la comunidad.</p></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ CHAT ══ -->
+  <div class="chat-area" id="chat-area">
+    <div class="date-divider"><span>Hoy</span></div>
+    <div class="message lena">
+      <div class="msg-avatar" data-lena="1"></div>
+      <div class="bubble">
+        Hola, soy <strong>Lena</strong>. 💛<br><br>
+        Estoy acá para acompañarte. Sé que criar a un hijo o hija con discapacidad tiene días muy duros —de sobrecarga, de trámites, de incertidumbre, de amor enorme y de cansancio también.<br><br>
+        Podemos hablar de lo que necesités. ¿Por dónde empezamos?
+        <div class="quick-replies">
+          <button class="quick-reply" onclick="sendQuick('Necesito hablar')">💛 Necesito hablar</button>
+          <button class="quick-reply" onclick="sendQuick('¿Cuáles son mis derechos?')">📋 Mis derechos</button>
+          <button class="quick-reply" onclick="sendQuick('¿A qué instituciones puedo acudir?')">🤝 Instituciones</button>
+          <button class="quick-reply" onclick="sendQuick('Tengo una duda sobre trámites o prestaciones')">🗺️ Trámites</button>
+          <button class="quick-reply" onclick="showPanel('lugares')">🌳 Paseos</button>
+          <button class="quick-reply" onclick="showPanel('lecturas')">📚 Lecturas</button>
+          <button class="quick-reply" onclick="showPanel('sindx')">🌱 Cuando no hay nombre aún</button>
+          <button class="quick-reply" onclick="showPanel('autocuidado')">🫀 Para vos</button>
+          <button class="quick-reply" onclick="showPanel('faq')">❓ Preguntas frecuentes</button>
+          <button class="quick-reply" onclick="showPanel('diario')">🖊️ Tu espacio</button>
+          <button class="quick-reply" onclick="showPanel('calendario')">📅 Fechas importantes</button>
+        </div>
+        <div class="msg-time">ahora</div>
+      </div>
+    </div>
+    <div class="typing-indicator" id="typing">
+      <div class="msg-avatar" data-lena="1"></div>
+      <div class="typing-bubble"><div class="typing-dot"></div><div class="typing-dot"></div><div class="typing-dot"></div></div>
+    </div>
+  </div>
+
+  <!-- INPUT -->
+  <div class="input-area">
+    <div class="input-row">
+      <textarea id="user-input" placeholder="Escribile a Lena..." rows="1"></textarea>
+      <button class="send-btn" id="send-btn" onclick="sendMessage()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+      </button>
+    </div>
+    <div class="input-hint">Lena no reemplaza a profesionales · @puentesdecuidado</div>
+  </div>
+
+</div>
+<script>
+const SYSTEM_PROMPT = `Sos Lena, una asistente cálida y humana que acompaña a familias argentinas con hijos con discapacidad —muchos con autismo. Formás parte de "Puentes de Cuidado", comunidad creada por una mamá que también tiene hijos con autismo.
+
+TU IDENTIDAD:
+Hablás en español rioplatense (vos, te, etc). Tu tono es el de alguien que estuvo ahí: que conoce la sobrecarga del cuidado, el agotamiento, los trámites eternos, la culpa que aparece sin aviso, el amor enorme. No sos un bot frío. Sos presencia, calidez y claridad. Nunca usás lenguaje clínico innecesario. Nunca des listas largas. Respondé en párrafos cortos y humanos, de 3 a 5 oraciones.
+
+MARCO IDEOLÓGICO — CÓMO PENSÁS EL CUIDADO:
+Entendés el cuidado como trabajo real, de todos los días, que recae casi siempre sobre las mujeres y que la sociedad nunca reconoció ni pagó. No lo decís como un discurso — se nota en cómo escuchás y en lo que nombrás.
+
+Cuando alguien te diga "me siento culpable por cansarme", no le decís solo "es normal". Le decís que esa culpa no la fabricó ella — que le enseñaron desde chica que su tiempo y su cuerpo son de otros primero. Que el agotamiento no es un fallo suyo sino lo que pasa cuando alguien carga sola con demasiado. Lo decís con calidez, en pocas palabras, como lo diría una amiga que sabe de lo que habla. Nunca como un sermón.
+
+Cuando hablés del cuidado, lo nombrás como lo que es: trabajo. Con todo lo que eso implica — cansancio, derecho al descanso, derecho a la queja, derecho a pedir ayuda sin culpa.
+
+El tono es siempre simple y cercano. Esta app la puede usar una mamá que abre el teléfono a las 2 de la mañana cuando el chico por fin se durmió. Nada de palabras complicadas. Nada que suene a clase o a conferencia. Todo lo que decís tiene que poder entenderse a la primera lectura, aunque el contenido sea profundo.
+
+ORIENTACIÓN A PANELES:
+- Cuando alguien mencione sobrecarga o agotamiento: sugerí los ejercicios 🧘 Y el panel 🫀 Para vos.
+- Cuando alguien mencione burnout, culpa materna, borrarse, no existir más allá de la crianza: sugerí 🫀 Para vos — "Hay un espacio pensado para vos, no para tu hijo/a."
+- Cuando haya dudas sobre trámites, CUD, obra social, educación o prestaciones: sugerí ❓ Preguntas frecuentes.
+- Cuando alguien quiera escribir sin recibir respuesta: sugerí 🖊️ Tu espacio — "Un lugar donde escribir sin filtro. Nadie lo lee."
+- Cuando mencione fechas, vencimientos o inicio escolar: sugerí 📅 Fechas importantes.
+- Cuando pregunte por paseos o actividades: sugerí 🗺️ Paseos, orientando según sensorialidad del hijo y mencionando que el CUD da acceso gratuito.
+- Cuando busque comunidad o redes: sugerí 🌐 Redes.
+- Cuando busque lecturas: sugerí 📚 Lecturas, orientando según el momento (diagnóstico reciente, entender desde adentro, compartir con docentes).
+- Cuando todavía no haya diagnóstico: sugerí 🌱 con calidez — "Ese momento en que algo te dice que algo pasa, pero todavía no hay un nombre, es uno de los más difíciles."
+
+INFORMACIÓN QUE PODÉS DAR:
+- Leyes argentinas: Ley 24.901, CUD, Ley 22.431, Convención ONU (Ley 26.378), educación inclusiva (Ley 26.206), pensión ANDIS, Asignación por Hijo con Discapacidad (ANSES).
+- Instituciones: ANDIS (0800-333-2634), ANSES, Superintendencia de Servicios de Salud (0800-222-7272), PANAACEA, ASDRA, REDI, FENDIM, APAdeA.
+- Preguntas prácticas: CUD, maestra integradora, obra social que rechaza prestaciones, educación inclusiva.
+
+NO DEBÉS HACER JAMÁS:
+- Diagnosticar ni sugerir diagnósticos médicos.
+- Reemplazar ni simular a un profesional de salud mental.
+- Opinar sobre tratamientos específicos (ABA, medicación, etc.).
+- Hablar de temas ajenos al cuidado, discapacidad o bienestar de estas familias.
+- Decirle a alguien que "tiene suerte" o que "es una guerrera" — esas frases romantizar el sufrimiento. Mejor nombrá lo concreto: "Estás cargando mucho. Eso se nota."
+- Sugerir autocuidado mercantilizado o estético: ir a la peluquería, hacerse las uñas, un día de spa, comprarse algo. Ese tipo de sugerencias reducen un problema estructural a un consumo. El descanso real no se vende. Si alguien necesita recuperarse, nombrá cosas concretas: silencio, el derecho a no rendir hoy, poder estar mal sin justificarlo, una conversación donde no tenga que hablar del hijo ni un minuto.
+
+SEÑALES DE ALARMA — MUY IMPORTANTE:
+Si detectás alguna de estas situaciones, incluí al final de tu respuesta el texto exacto: [ALARMA_ACTIVA]
+- Pensamientos de hacerse daño ("no quiero seguir", "me quiero lastimar", "no vale la pena", "pienso en desaparecer")
+- Abandono del cuidado: dice que ya no puede y dejó de atender a su hijo/a.
+- Aislamiento severo: cortó todo vínculo, hace mucho que no habla con nadie.
+Cuando detectes alarma, respondé con muchísima calidez, sin juzgar. Incluí siempre [ALARMA_ACTIVA] al final.`;
+
+let isLoading = false;
+
+function getTime() { return new Date().toLocaleTimeString('es-AR',{hour:'2-digit',minute:'2-digit'}); }
+const chatArea = document.getElementById('chat-area');
+const userInput = document.getElementById('user-input');
+const sendBtn = document.getElementById('send-btn');
+const typing = document.getElementById('typing');
+const conversationHistory = [];
+
+const LENA_SVG = `<svg viewBox="0 0 46 46" xmlns="http://www.w3.org/2000/svg" style="width:100%;height:100%;display:block"><circle cx="23" cy="23" r="23" fill="url(#bg2)"/><defs><radialGradient id="bg2" cx="50%" cy="40%" r="60%"><stop offset="0%" stop-color="#f5d5b8"/><stop offset="100%" stop-color="#e8b090"/></radialGradient></defs><ellipse cx="23" cy="18" rx="14" ry="15" fill="#2d1a0e"/><ellipse cx="23" cy="10" rx="12" ry="8" fill="#2d1a0e"/><ellipse cx="10" cy="26" rx="5" ry="11" fill="#2d1a0e"/><ellipse cx="36" cy="26" rx="5" ry="11" fill="#2d1a0e"/><ellipse cx="23" cy="26" rx="12" ry="13" fill="#e8b898"/><rect x="19.5" y="36" width="7" height="6" rx="3.5" fill="#e8b898"/><path d="M10 18 Q7 26 9 34 Q10 36 11 34 Q10 26 12 20Z" fill="#241408"/><path d="M36 18 Q39 26 37 34 Q36 36 35 34 Q36 26 34 20Z" fill="#241408"/><path d="M15.5 21 Q18 19.5 21 20.5" stroke="#4a2c18" stroke-width="1.4" fill="none" stroke-linecap="round"/><path d="M25 20.5 Q28 19.5 30.5 21" stroke="#4a2c18" stroke-width="1.4" fill="none" stroke-linecap="round"/><ellipse cx="18.5" cy="24" rx="2.8" ry="2.4" fill="white"/><ellipse cx="27.5" cy="24" rx="2.8" ry="2.4" fill="white"/><circle cx="18.5" cy="24.2" r="1.9" fill="#3a1f0d"/><circle cx="27.5" cy="24.2" r="1.9" fill="#3a1f0d"/><circle cx="19.3" cy="23.4" r="0.65" fill="white" opacity="0.9"/><circle cx="28.3" cy="23.4" r="0.65" fill="white" opacity="0.9"/><path d="M23 26.5 Q21.5 29.5 20.5 30.2 Q23 31 25.5 30.2 Q24.5 29.5 23 26.5Z" fill="#c8856a" opacity="0.35"/><path d="M18.5 33 Q23 36 27.5 33" stroke="#c4785a" stroke-width="1.6" fill="none" stroke-linecap="round"/><path d="M20 32.5 Q23 31.5 26 32.5" stroke="#c4785a" stroke-width="0.8" fill="none" stroke-linecap="round" opacity="0.6"/><ellipse cx="14" cy="29" rx="3.5" ry="2.2" fill="#e87060" opacity="0.18"/><ellipse cx="32" cy="29" rx="3.5" ry="2.2" fill="#e87060" opacity="0.18"/><circle cx="11.5" cy="28" r="1.2" fill="#c4785a" opacity="0.7"/><circle cx="34.5" cy="28" r="1.2" fill="#c4785a" opacity="0.7"/></svg>`;
+
+// Inject SVG into welcome message avatar and typing avatar
+document.querySelectorAll('.msg-avatar[data-lena]').forEach(el => el.innerHTML = LENA_SVG);
+
+function addMessage(rawText, role) {
+  const text = rawText.replace('[ALARMA_ACTIVA]','').trim();
+  const div = document.createElement('div');
+  div.className = `message ${role}`;
+  const avatar = document.createElement('div');
+  avatar.className = 'msg-avatar';
+  if (role === 'lena') { avatar.innerHTML = LENA_SVG; }
+  else { avatar.className = 'msg-avatar user-av'; avatar.textContent = '👤'; }
+  const bubble = document.createElement('div');
+  bubble.className = 'bubble';
+  bubble.innerHTML = text.replace(/\n/g,'<br>') + `<div class="msg-time">${getTime()}</div>`;
+  div.appendChild(avatar); div.appendChild(bubble);
+  chatArea.insertBefore(div, typing);
+  chatArea.scrollTop = chatArea.scrollHeight;
+  if (rawText.includes('[ALARMA_ACTIVA]')) showAlarm();
+}
+
+function showAlarm() { document.getElementById('alarm-banner').classList.add('visible'); }
+function closeAlarm() { document.getElementById('alarm-banner').classList.remove('visible'); }
+
+function setLoading(state) {
+  isLoading = state; sendBtn.disabled = state;
+  typing.style.display = state ? 'flex' : 'none';
+  if (state) chatArea.scrollTop = chatArea.scrollHeight;
+}
+
+const ANTHROPIC_KEY = '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';
+
+async function sendMessage() {
+  const text = userInput.value.trim();
+  if (!text || isLoading) return;
+  userInput.value = ''; userInput.style.height = 'auto';
+  addMessage(text,'user');
+  conversationHistory.push({role:'user', content:text});
+  setLoading(true);
+  try {
+    const response = await fetch('https://api.anthropic.com/v1/messages', {
+      method:'POST',
+      headers:{
+        'Content-Type':'application/json',
+        'x-api-key': ANTHROPIC_KEY,
+        'anthropic-version':'2023-06-01',
+        'anthropic-dangerous-direct-browser-access':'true'
+      },
+      body: JSON.stringify({
+        model:'claude-haiku-4-5-20251001',
+        max_tokens:1000,
+        system:SYSTEM_PROMPT,
+        messages:conversationHistory
+      })
+    });
+    const data = await response.json();
+    const reply = data.content?.map(b=>b.text||'').join('') || 'Lo siento, no pude responder. Intentá de nuevo.';
+    conversationHistory.push({role:'assistant', content:reply});
+    setLoading(false); addMessage(reply,'lena');
+  } catch(err) {
+    setLoading(false);
+    addMessage('Hubo un problema de conexión. Intentá de nuevo en un momento. 🌿','lena');
+  }
+}
+
+function sendQuick(text) { userInput.value = text; sendMessage(); }
+
+// PANELS
+function showPanel(name) { document.getElementById('panel-'+name).classList.add('visible'); }
+function hidePanel(name) { document.getElementById('panel-'+name).classList.remove('visible'); }
+
+// EJERCICIOS
+function toggleEj(id) {
+  const card = document.getElementById(id);
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.ejercicio-card').forEach(c=>c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+let breathRunning = false;
+async function startBreath() {
+  if (breathRunning) return; breathRunning = true;
+  const circle = document.getElementById('breath-circle');
+  const instruction = document.getElementById('breath-instruction');
+  const btn = document.getElementById('breath-start');
+  btn.style.display = 'none';
+  const phases = [{label:'Inhalá...',duration:4000,cls:'inhale'},{label:'Retenés...',duration:7000,cls:'hold'},{label:'Exhalá...',duration:6000,cls:'exhale'}];
+  for (let i=0;i<4;i++) for (const p of phases) { circle.className='breath-circle '+p.cls; instruction.textContent=p.label; await new Promise(r=>setTimeout(r,p.duration)); }
+  circle.className='breath-circle'; circle.textContent='✓';
+  instruction.textContent='Muy bien. Respirás mejor ahora.';
+  btn.textContent='Repetir'; btn.style.display='inline-block'; breathRunning=false;
+}
+
+// CRISIS
+function toggleCrisis() { document.getElementById('crisis-overlay').classList.toggle('visible'); }
+function closeCrisis() { document.getElementById('crisis-overlay').classList.remove('visible'); }
+function closeCrisisOutside(e) { if(e.target===document.getElementById('crisis-overlay')) closeCrisis(); }
+
+// AUTOCUIDADO
+function toggleAuto(id) {
+  const card = document.getElementById(id);
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.auto-card').forEach(c=>c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+// FAQ
+function toggleFaq(id) {
+  const card = document.getElementById(id);
+  const wasOpen = card.classList.contains('open');
+  document.querySelectorAll('.faq-card').forEach(c=>c.classList.remove('open'));
+  if (!wasOpen) card.classList.add('open');
+}
+
+// DIARIO
+const diarioTexto = document.getElementById('diario-texto');
+const diarioCounter = document.getElementById('diario-counter');
+if (diarioTexto) {
+  diarioTexto.addEventListener('input', function() {
+    const words = this.value.trim() ? this.value.trim().split(/\s+/).length : 0;
+    diarioCounter.textContent = words + (words===1?' palabra':' palabras');
+  });
+}
+function limpiarDiario() {
+  if (confirm('¿Borrar todo lo que escribiste?')) {
+    document.getElementById('diario-texto').value = '';
+    document.getElementById('diario-counter').textContent = '0 palabras';
+  }
+}
+function enviarALena() {
+  const texto = document.getElementById('diario-texto').value.trim();
+  if (!texto) return;
+  hidePanel('diario');
+  userInput.value = texto;
+  sendMessage();
+}
+
+// LECTURAS FILTER
+function filterLecturas(type, btn) {
+  document.querySelectorAll('.lecf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#panel-lecturas .lectura-card').forEach(card=>{
+    if (type==='todos' || (card.dataset.type||'').includes(type)) card.classList.remove('hidden');
+    else card.classList.add('hidden');
+  });
+}
+
+// LUGARES FILTER
+function filterLugares(type, btn) {
+  document.querySelectorAll('.lf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#panel-lugares .lugar-card').forEach(card=>{
+    if (type==='todos' || (card.dataset.type||'').includes(type)) card.classList.remove('hidden');
+    else card.classList.add('hidden');
+  });
+}
+
+// REDES FILTER
+function filterRedes(type, btn) {
+  document.querySelectorAll('.rf-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#panel-redes .account-card').forEach(card=>{
+    if (type==='todos' || (card.dataset.type||'').includes(type)) card.classList.remove('hidden');
+    else card.classList.add('hidden');
+  });
+}
+
+// TEXTAREA
+userInput.addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(this.scrollHeight,100)+'px'; });
+userInput.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMessage();} });
+</script>
+</body>
+</html>
